@@ -1,0 +1,62 @@
+import json
+
+def build_user_input(
+    Government_Agency,
+    Competition_Name,
+    Announcement_Date,
+    Competition_Document_Fees,
+    Payment_Method,
+    Name_of_Government_Agency_Representative,
+    Position_of_Government_Agency_Representative,
+    Phone_Number_of_Government_Agency_Representative,
+    Fax_Number_of_Government_Agency_Representative,
+    Email_of_Government_Agency_Representative,
+    Bid_Submission_Address,
+    Bid_Submission_Building,
+    Bid_Submission_Floor,
+    Bid_Submission_Department_Name,
+    Bid_Submission_Time,
+    Inquiry_Response_Email,
+    Initial_Guarantee_Percentage,
+    Bid_Evaluation_Criteria,
+    Penalties,
+    Delay_Penalties,
+    Insurance,
+    Service_Delivery_Plan,
+    Service_Execution_Location,
+    Bill_of_Quantities_and_Prices,
+    Local_Content_Requirements,
+    Special_Conditions,
+):
+    """
+    Build structured input JSON for tender generation.
+    """
+    data = {
+        "Government_Agency": Government_Agency,
+        "Competition_Name": Competition_Name,
+        "Announcement_Date": Announcement_Date,
+        "Competition_Document_Fees": Competition_Document_Fees,
+        "Payment_Method": Payment_Method,
+        "Name_of_Government_Agency_Representative": Name_of_Government_Agency_Representative,
+        "Position_of_Government_Agency_Representative": Position_of_Government_Agency_Representative,
+        "Phone_Number_of_Government_Agency_Representative": Phone_Number_of_Government_Agency_Representative,
+        "Fax_Number_of_Government_Agency_Representative": Fax_Number_of_Government_Agency_Representative,
+        "Email_of_Government_Agency_Representative": Email_of_Government_Agency_Representative,
+        "Bid_Submission_Address": Bid_Submission_Address,
+        "Bid_Submission_Building": Bid_Submission_Building,
+        "Bid_Submission_Floor": Bid_Submission_Floor,
+        "Bid_Submission_Department_Name": Bid_Submission_Department_Name,
+        "Bid_Submission_Time": Bid_Submission_Time,
+        "Inquiry_Response_Email": Inquiry_Response_Email,
+        "Initial_Guarantee_Percentage": Initial_Guarantee_Percentage,
+        "Bid_Evaluation_Criteria": Bid_Evaluation_Criteria,
+        "Penalties": Penalties,
+        "Delay_Penalties": Delay_Penalties,
+        "Insurance": Insurance,
+        "Service_Delivery_Plan": Service_Delivery_Plan,
+        "Service_Execution_Location": Service_Execution_Location,
+        "Bill_of_Quantities_and_Prices": Bill_of_Quantities_and_Prices,
+        "Local_Content_Requirements": Local_Content_Requirements,
+        "Special_Conditions": Special_Conditions
+    }
+    return json.dumps(data, ensure_ascii=False)

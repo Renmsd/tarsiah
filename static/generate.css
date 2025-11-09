@@ -1,0 +1,281 @@
+/* ======================= النمط العام للموقع الرسمي ======================= */
+body {
+  font-family: "Tajawal", "Segoe UI", sans-serif;
+  margin: 0;
+  background-image: url("/static/images/2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 70px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* طبقة شفافة رسمية */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main, header, section, .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ======================= الهيدر الرسمي ======================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #547f8534;
+  padding: 12px 30px;
+  color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.logo {
+  font-size: 19px;
+  font-weight: bold;
+  color: #ffffff;
+  /* text-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.7), 
+    0 0 20px rgba(0, 255, 255, 0.5), 
+    0 0 40px rgba(0, 255, 255, 0.3); */
+  transition: all 0.3s ease;
+}
+
+/* لما تمرين الماوس عليه يصير اللمع أقوى */
+.logo:hover {
+  text-shadow: 
+    0 0 15px rgb(153, 164, 164), 
+    0 0 3px rgba(152, 165, 165, 0.9), 
+    0 0 50px rgba(144, 158, 158, 0.8);
+  transform: scale(1.05);
+}
+
+
+.topbar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.topbar-center a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.topbar-center a:hover,
+.topbar-center .active {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+
+
+/* ======================= الحاوية ======================= */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  min-height: 80vh;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.97);
+  margin: 100px auto 60px auto;
+  padding: 60px 70px;
+  color: #1a1a1a;
+}
+
+/* ======================= العناوين ======================= */
+h1, h2, h3 {
+  font-weight: 600;
+  color: #0f3d61;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 25px;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-right: 5px solid #0f3d61;
+  padding-right: 10px;
+}
+
+/* ======================= النصوص ======================= */
+.section-note {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* ======================= الجداول الرسمية ======================= */
+.dates-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.dates-table th {
+  background: #0f3d61;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.dates-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  background: #f9f9ff;
+  text-align: center;
+  font-size: 15px;
+  color: #333;
+}
+
+.dates-table input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background: #f3f6fa;
+  border-radius: 5px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+}
+
+.dates-table input:focus {
+  outline: 2px solid #0f3d61;
+}
+
+/* ======================= مربعات النص ======================= */
+textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  color: #222;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  resize: vertical;
+  font-family: "Tajawal", sans-serif;
+  line-height: 1.8;
+  transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #005fa3;
+  box-shadow: 0 0 6px rgba(0, 95, 163, 0.2);
+}
+
+/* ======================= الأزرار الرسمية ======================= */
+button {
+  background: #0f3d61;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 5px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #0c3252;
+  box-shadow: 0 0 10px rgba(15, 61, 97, 0.3);
+}
+
+.btn-secondary {
+  background: #bbbbbb;
+  color: #f5efef;
+}
+
+.generate-btn {
+  background: #004c97;
+  font-size: 16px;
+  padding: 12px 30px;
+  font-weight: 600;
+}
+
+/* ======================= تعريف المنافسة ======================= */
+.competition-definition {
+  margin-top: 25px;
+}
+
+.competition-definition label {
+  font-weight: 600;
+  color: #0f3d61;
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.loading-msg {
+  display: none;
+  color: #002b57;
+  font-size: 16px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.loading-msg span {
+  display: inline-block;
+  width: 15px;
+  text-align: left;
+  animation: blink 1s infinite steps(1);
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+/* ======================= الحركات ======================= */
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+  animation: fade 0.5s ease;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.center {
+  text-align: center;
+}

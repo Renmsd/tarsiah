@@ -1,0 +1,595 @@
+/* ======================= النمط العام للموقع الرسمي ======================= */
+body {
+  font-family: "Tajawal", "Segoe UI", sans-serif;
+  margin: 0;
+  background-image: url("/static/images/2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
+  padding-top: 70px;
+  overflow-x: hidden;
+}
+
+/* ✅ الطبقة الشفافة (خلفية مظللة بدون تغطية المحتوى) */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: -1; /* ✅ يجعلها خلف المحتوى بالكامل */
+}
+
+/* ضمان بقاء المحتوى فوق الخلفية */
+main, header, section, .container, .form-container {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* ======================= الهيدر ======================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #547f8534;
+  padding: 12px 30px;
+  color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.logo {
+  font-size: 19px;
+  font-weight: bold;
+  color: #ffffff;
+  /* text-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.7), 
+    0 0 20px rgba(0, 255, 255, 0.5), 
+    0 0 40px rgba(0, 255, 255, 0.3); */
+  transition: all 0.3s ease;
+}
+
+/* لما تمرين الماوس عليه يصير اللمع أقوى */
+.logo:hover {
+  text-shadow: 
+    0 0 15px rgb(153, 164, 164), 
+    0 0 3px rgba(152, 165, 165, 0.9), 
+    0 0 50px rgba(144, 158, 158, 0.8);
+  transform: scale(1.05);
+}
+
+
+.topbar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.topbar-center a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.topbar-center a:hover,
+.topbar-center .active {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-direction: row-reverse;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+
+/* ===================== الحاوية الرئيسية ===================== */
+.form-container {
+  width: 85%;
+  max-width: 950px;
+  margin: 40px auto 80px auto;
+  background-color: #ffffff;
+  padding: 50px 60px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================== العناوين ===================== */
+h2 {
+  text-align: center;
+  color: #0f3d61;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+h3 {
+  color: #0f3d61;
+  margin-top: 35px;
+  font-size: 19px;
+  border-right: 4px solid #0f3d61;
+  padding-right: 10px;
+  font-weight: 600;
+}
+
+/* ===================== الحقول ===================== */
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f8fafc;
+  color: #0b1726;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #005fa3;
+  box-shadow: 0 0 6px rgba(0, 95, 163, 0.25);
+}
+
+/* ===================== مجموعة آلية الدفع ===================== */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 10px 0 25px;
+}
+
+.checkbox-group label {
+  white-space: nowrap; 
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ffffff;
+  border: 1px solid #b8c3cc;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #0b1726;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  accent-color: #0f3d61;
+  transform: scale(1.2);
+  margin: 0;
+}
+
+.checkbox-group label:hover {
+  background-color: #e9f1fb;
+  border-color: #005fa3;
+  box-shadow: 0 0 10px rgba(0, 95, 163, 0.15);
+}
+
+/* ===================== الأزرار ===================== */
+button {
+  background-color: #0f3d61;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #265b87;
+  box-shadow: 0 0 8px rgba(15, 61, 97, 0.3);
+}
+
+.btn-secondary {
+  background-color: #e6e6e6;
+  color: #222;
+}
+
+.btn-secondary:hover {
+  background-color: #d0d0d0;
+}
+
+/* ===================== أزرار التنقل ===================== */
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+}
+
+/* ===================== مربع المراجعة ===================== */
+.review-header {
+  background-color: #0f3d619f;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.review-box {
+  background-color: #e5e9ed;
+  border-radius: 10px;
+  padding: 25px;
+  color: #0b1726;
+  line-height: 1.9;
+  font-size: 15px;
+  border: 1px solid #e4eaee;
+}
+
+/* ===================== زر التوليد ===================== */
+.generate-section {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.generate-btn {
+  display: inline-block;
+  background-color: #0f3d61;
+  color: #fff;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.generate-btn:hover {
+  background-color: #265b87;
+  box-shadow: 0 0 10px rgba(15, 61, 97, 0.3);
+}
+
+/* ===================== رسالة الخطأ ===================== */
+/* 🎯 رسالة الخطأ المحسّنة */
+#errorMsg {
+  display: none;
+  background: linear-gradient(135deg, #ffe5e5, #ffd1d1);
+  color: #a13737fc;
+  border: 1px solid #ff8c8c;
+  border-left: 6px solid #d95959;
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  width: 90%;
+  margin: 18px auto;
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.15);
+  animation: fadeSlideDown 0.4s ease;
+}
+
+/* 🔹 أنيميشن دخول وانزلاق لطيف */
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ✨ أنيميشن اختفاء تدريجي */
+.fade-out {
+  animation: fadeOut 0.6s ease forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-5px); }
+}
+
+
+/* ======================= قسم توليد الجداول ======================= */
+.table-generator {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 25px;
+  margin-top: 30px;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.table-generator:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.table-generator h3 {
+  color: #0f3d61;
+  border-right: 5px solid #0f3d61;
+  padding-right: 10px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.table-generator textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: #f9f9ff;
+  color: #222;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.table-generator textarea:focus {
+  outline: none;
+  border-color: #004c97;
+  box-shadow: 0 0 8px rgba(0, 76, 151, 0.3);
+}
+
+/* 🧾 تنسيق الجدول الناتج */
+#generatedTableContainer table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+#generatedTableContainer th {
+  background: #0f3d61;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+#generatedTableContainer td {
+  border: 1px solid #ddd;
+  background: #f9f9ff;
+  text-align: center;
+  padding: 10px;
+}
+
+#generatedTableContainer input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background: #f3f6fa;
+  border-radius: 5px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+#generatedTableContainer input:focus {
+  outline: 2px solid #0f3d61;
+}
+
+/* ⚙️ أزرار التوليد والحفظ */
+.btn-generate, .btn-save {
+  background: #0f3d61;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-generate:hover, .btn-save:hover {
+  background: #0c3252;
+  box-shadow: 0 0 10px rgba(15, 61, 97, 0.3);
+}
+
+/* 🕓 الرسالة أثناء التحميل */
+.loading-msg {
+  color: #002b57;
+  font-size: 16px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ✨ ظهور الجدول بشكل ناعم */
+#generatedTableContainer {
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ===================== نص التحميل ===================== */
+.loading-msg {
+  display: none;
+  color: #002b57;
+  font-size: 16px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.loading-msg span {
+  display: inline-block;
+  width: 15px;
+  text-align: left;
+  animation: blink 1s infinite steps(1);
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+
+/* ===================== تحسين الواجهة ===================== */
+textarea::placeholder,
+input::placeholder {
+  color: #9aa5b1;
+  font-size: 14px;
+}
+
+/* ===================== تنقل الخطوات ===================== */
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+  animation: fade 0.5s ease;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* 🎯 تصميم موحد وأنيق للجداول الثلاثة (الكميات - المواد - المعدات) */
+/* ======================= 🧾 الجداول الناتجة بعد التوليد ======================= */
+.generated-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+/* 🎯 رؤوس الأعمدة */
+.generated-table-container th {
+  background: #0f3d61;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+}
+
+/* 🩶 خلايا البيانات */
+.generated-table-container td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  background: #f9f9ff;
+  text-align: center;
+  font-size: 15px;
+  color: #333;
+}
+
+/* 🩵 تمييز الصفوف بالتبادل */
+.generated-table-container tr:nth-child(even) td {
+  background-color: #f2f6fb;
+}
+
+/* ✏️ حقول الإدخال داخل الجدول */
+.generated-table-container input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background: #f3f6fa;
+  border-radius: 6px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+/* عند التحديد */
+.generated-table-container input:focus {
+  outline: 2px solid #0f3d61;
+  box-shadow: 0 0 4px rgba(15, 61, 97, 0.3);
+}
+
+/* 🎨 لون مخصص لكل نوع من الجداول */
+.quantities-section .generated-table-container th {
+  background: linear-gradient(90deg, #0f3d61, #2d6ca2);
+}
+
+.materials-section .generated-table-container th {
+  background: linear-gradient(90deg, #0e577d, #2d82a9);
+}
+
+.equipment-section .generated-table-container th {
+  background: linear-gradient(90deg, #003b70, #1a5fa9);
+}
+
+/* 🕓 حركة ناعمة لظهور الجدول */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 📄 الملاحظات تحت العنوان */
+.section-note {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+
+/* 🕓 نص التحميل */
+.loading-msg {
+  display: none;
+  color: #003b70;
+  font-size: 16px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.loading-msg span {
+  display: inline-block;
+  width: 15px;
+  animation: blink 1s infinite steps(1);
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}

@@ -1,0 +1,92 @@
+/* 🌌 خلفية الصفحة */
+body {
+  font-family: "Tajawal", "Segoe UI", sans-serif;
+  background-image: url("/static/images/2.jpg"); /* نفس خلفية الهوم */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+/* طبقة ضباب خفيفة وسواد ناعم */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 0;
+}
+
+/* ✅ صندوق النتائج */
+.container {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 50px 60px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  width: 80%;
+  max-width: 800px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 🎉 العنوان */
+h2 {
+  color: #ffffff;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* 📄 النص والوصف */
+.desc {
+  color: #dfe7ff;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+/* 🔹 رابط التحميل */
+.download-link {
+  display: inline-block;
+  color: #4ea4ffb9;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.download-link:hover {
+  color: #3f7684;
+  box-shadow: 0 0 10px rgba(0, 188, 212, 0.4);
+}
+
+/* 🔘 زر الرجوع */
+.btn-section {
+  margin-top: 40px;
+}
+
+.back-btn {
+  background-color: #062532eb;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #3f7684;
+  box-shadow: 0 0 10px rgba(0, 188, 212, 0.4);
+}

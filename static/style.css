@@ -1,0 +1,363 @@
+body {
+  font-family: "Tajawal", "Segoe UI", sans-serif;
+  margin: 0;
+  background-image: url("/static/images/2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed; /* الخلفية تبقى ثابتة عند التمرير */
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 70px;
+  position: relative;
+  overflow-x: hidden; /* نمنع التمرير الجانبي فقط */
+}
+
+/* 🌫️ طبقة ضبابية تغطي الخلفية بالكامل لكن بدون منع التمرير */
+body::before {
+  content: "";
+  position: fixed; /* تبقى مغطية الشاشة حتى مع التمرير */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: rgba(255, 255, 255, 0.55);  */
+  backdrop-filter: blur(6px);      /* ضبابية ناعمة */
+  pointer-events: none;            /* 🔹 مهم جدًا: يمنعها من حجب التفاعل أو التمرير */
+  z-index: 0;                      /* خلف كل شيء */
+}
+
+/* نخلي كل المحتوى فوق طبقة الضباب */
+main, header, section, .container {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* عشان المحتوى يطلع فوق الطبقة */
+main, header, section, .container {
+  position: relative;
+  z-index: 1;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55); /* سواد بنسبة 55% */
+  backdrop-filter: blur(6px);      /* ضبابية خفيفة */
+  z-index: -1;                     /* تكون خلف المحتوى */
+}
+
+/* ======================= الهيدر ======================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #547f8534;
+  padding: 12px 30px;
+  color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.logo {
+  font-size: 19px;
+  font-weight: bold;
+  color: #ffffff;
+  /* text-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.7), 
+    0 0 20px rgba(0, 255, 255, 0.5), 
+    0 0 40px rgba(0, 255, 255, 0.3); */
+  transition: all 0.3s ease;
+}
+
+/* لما تمرين الماوس عليه يصير اللمع أقوى */
+.logo:hover {
+  text-shadow: 
+    0 0 15px rgb(153, 164, 164), 
+    0 0 3px rgba(152, 165, 165, 0.9), 
+    0 0 50px rgba(144, 158, 158, 0.8);
+  transform: scale(1.05);
+}
+
+
+.topbar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.topbar-center a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.topbar-center a:hover,
+.topbar-center .active {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-direction: row-reverse;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+/* ===== أيقونات المستخدم واللغة ===== */
+.lang-icon,
+.user-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #ffffff !important; /* أبيض ناصع وواضح */
+  transition: 0.3s ease;
+  z-index: 2000;
+  /* filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));   */
+  background-color: rgba(14, 37, 62, 0.436); /* دائرة شفافة خفيفة */
+  border-radius: 50%;
+  padding: 6px; 
+  margin-left:5px;
+
+  /* مساحة داخلية بسيطة */
+}
+
+/* تأثير عند المرور */
+.lang-icon:hover,
+.user-icon:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.15);
+  color: #ffffff;
+}
+
+/* ===== القائمة المنسدلة (Dropdown) ===== */
+.user-menu {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background-color: #d3d2d636; /* نفس لون الخلفية العامة */
+  border: 1px solid rgba(236, 229, 229, 0.956);
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(213, 212, 212, 0.5);
+  min-width: 119px;
+  overflow: hidden;
+  z-index: 9999;
+  
+ 
+}
+
+.dropdown-content span {
+  display: block;
+  padding: 4px;
+  left: 0;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #d6d2d236; /* نفس لون الهيدر */
+  border-bottom: 1px solid #ffffff58;
+  
+}
+
+.dropdown-content a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f0f0f0;
+  text-decoration: none;
+  padding: 10px 12px;
+  font-size: 10px;
+  transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ======================= الأقسام ======================= */
+.container {
+  display: flex;
+  width: 90%;
+  max-width: 1200px;
+  height: 80vh;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  margin: 100px auto 60px auto;
+}
+
+.left-section {
+  flex: 1;
+  background-color: #200d3323;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding: 40px;
+}
+
+.card {
+  background-color: #63adb750;
+  color: rgb(255, 255, 255);
+  border-radius: 10px;
+  width: 90%;
+  padding: 30px;
+  text-align: right;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.card:hover {
+  background-color: #498898;
+  transform: translateY(-5px);
+}
+.card i {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #bcd4f6;
+}
+
+.right-section {
+  flex: 1;
+  background-color: #1c0b2b87;
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.right-section h1 {
+  color: #ffffff;
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+.right-section h2 {
+  color: #9850f5;
+  font-size: 19px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+.right-section p {
+  color: #d1d5db;
+  font-size: 16px;
+  margin-bottom: 25px;
+  line-height: 1.8;
+}
+.features {
+  list-style: none;
+  padding: 0;
+}
+.features li {
+  position: relative;
+  padding-right: 20px;
+  margin-bottom: 12px;
+  color: #fff;
+  font-size: 15px;
+}
+.features li::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 7px;
+  width: 8px;
+  height: 8px;
+  background-color: #498898;
+  border-radius: 50%;
+}
+body[dir="ltr"] .features li {
+  padding-left: 20px;
+  padding-right: 0;
+}
+body[dir="ltr"] .features li::before {
+  left: 0;
+  right: auto;
+}
+
+/* ======================= قسم آخر المشاريع ======================= */
+.recent-projects-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 60px; /* مسافة بين الكروت والجدول */
+  margin-bottom: 80px; /* مسافة من أسفل الصفحة */
+}
+
+.recent-projects {
+  width: 85%;
+  max-width: 1100px;
+  background-color: #200d3323; /* أزرق غامق جدًا متناسق مع الكروت */
+  border-radius: 12px;
+  padding: 25px 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  text-align: right;
+  color: #ffffff; /* الخط أبيض */
+  border: 1px solid #1f2e48; /* إطار خفيف */
+}
+
+.recent-projects h3 {
+  color: #f2f4f6; /* أزرق فاتح مثل العناوين فوق */
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== الجدول ===== */
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #200d3323; /* أزرق غامق داخل الجدول */
+  border-radius: 10px;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.projects-table th {
+  background-color: #63adb750; /* صف العناوين أزرق متوسط */
+  color: #e6efff;
+  padding: 12px;
+  border-bottom: 2px solid #63adb750;
+  font-weight: 600;
+  text-align: center;
+}
+
+.projects-table td {
+  padding: 12px;
+  color: #d8e2f1;
+  border-bottom: 1px solid #63adb750;
+  text-align: center;
+  font-size: 15px;
+}
+
+.projects-table tr:hover {
+  background-color: #498898; /* عند المرور */
+  transition: background-color 0.3s ease;
+}
+
+
+/* ====================== صفحه الادخال====================== */
+/* ====================== نموذج الإدخال متعدد الخطوات ====================== */

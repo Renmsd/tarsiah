@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نتائج الكراسة | Smart RFP AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h2> تم إنشاء الكراسة بنجاح!</h2>
+    <p class="desc">
+      يمكنك الآن تحميل الكراسة النهائية بصيغة <b>Word</b> عبر الزر أدناه.
+      <br><br>
+      <a href="{{ url_for('download_file') }}" class="download-link">⬇️ تحميل الكراسة النهائية</a>
+    </p>
+    <div class="btn-section">
+      <a href="/" class="back-btn">الرجوع إلى الصفحة الرئيسية</a>
+    </div>
+  </div>
+</body>
+</html>

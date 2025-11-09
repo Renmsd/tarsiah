@@ -1,0 +1,9 @@
+flask==3.0.3
+python-docx==1.1.2
+docxtpl==0.18.0
+langchain==0.3.7
+langchain-openai==0.2.6
+faiss-cpu==1.8.0.post1
+python-dotenv==1.0.1
+openai==1.52.0
+tiktoken==0.7.0

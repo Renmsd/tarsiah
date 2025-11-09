@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الصفحة الرئيسية | Smart RFP AI</title>
+
+  <!-- 🔹 استدعاء ملفات التنسيق والأيقونات -->
+  <link rel="stylesheet" href="static\style.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body lang="ar" dir="rtl">
+  <!-- =================== الهيدر =================== -->
+  <header class="topbar">
+    <div class="topbar-right">
+      <div class="logo">Smart RFP AI</div>
+    </div>
+    <nav class="topbar-center">
+      <a href="/" class="active" id="nav-home"></a>
+      <a href="/rfp_input" id="nav-generate"></a>
+      <a href="/comparison" id="nav-compare"></a>
+    </nav>
+
+    <div class="topbar-left">
+      <i class='bx bx-globe lang-icon' onclick="toggleLang()" title="تبديل اللغة"></i>
+
+      <div class="user-menu">
+        <i class='bx bx-user user-icon' onclick="toggleUserMenu()" title="الحساب"></i>
+        <div id="userDropdown" class="dropdown-content">
+          <span>{{ username }}</span>
+          <a href="/logout">
+            <i class='bx bx-log-out'></i>
+            <span id="logout-text">تسجيل الخروج</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =================== المحتوى الرئيسي =================== -->
+  <main>
+    <div class="container">
+      <!-- ✅ القسم الأيسر (الكروت) -->
+      <div class="left-section">
+        <div class="card" onclick="location.href='/rfp_input'">
+          <i class='bx bx-file-generate'></i>
+          <h3 id="card1-title">إنشاء RFP</h3>
+          <p id="card1-text">ابدأ بإنشاء RFP بناءً على بيانات المشروع</p>
+        </div>
+
+        <div class="card" onclick="location.href='/comparison'">
+          <i class='bx bx-git-compare'></i>
+          <h3 id="card2-title">مقارنة العروض</h3>
+          <p id="card2-text">قارن بين RFP المقدمة باستخدام الذكاء الاصطناعي</p>
+        </div>
+      </div>
+
+      <!-- ✅ القسم الأيمن (النصوص) -->
+      <div class="right-section">
+        <h1 id="main-title">Smart RFP AI</h1>
+        <h2 id="main-subtitle">حلول ذكية لإدارة  RFP والعروض بدقة وكفاءة</h2>
+        <p id="main-desc">
+          منصة متكاملة تساعدك على إنشاء، تحليل، ومقارنة RFP باستخدام تقنيات الذكاء الاصطناعي الحديثة.
+        </p>
+
+        <ul class="features">
+          <li id="feat1">سهولة الاستخدام</li>
+          <li id="feat2">ذكاء اصطناعي موثوق</li>
+          <li id="feat3">نتائج دقيقة</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ✅ القسم السفلي (الجدول) -->
+    <section class="recent-projects-section">
+      <div class="recent-projects">
+        <h3>آخر المشاريع التي تم توليدها</h3>
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th id="col-project">اسم المشروع</th>
+              <th id="col-date">تاريخ الإنشاء</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- البيانات تتغير تلقائياً من JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  const PROJECTS_URL = "{{ url_for('static', filename='projects.json') }}";
+  </script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

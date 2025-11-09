@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مراجعة وتوليد الوثيقة | Smart RFP AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='generate.css') }}">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- 🔹 الهيدر -->
+  <header class="topbar">
+    <div class="topbar-right">
+      <a href="/" class="logo">Smart RFP AI</a>
+    </div>
+
+    <nav class="topbar-center">
+      <a href="/" id="nav-home">الرئيسية</a>
+      <a href="/rfp_input" class="active" id="nav-generate">إنشاء RFP</a>
+      <a href="/comparison" id="nav-compare">مقارنة العروض</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <h2>مراجعة وتعديل القيم المولدة قبل إنشاء RFP النهائية</h2>
+
+      <form action="/save" method="post">
+
+        <!-- ================= القسم الأول: التواريخ والإجراءات ================= -->
+        <div class="form-step active">
+          <h3>التواريخ والإجراءات</h3>
+          <p class="section-note">يرجى مراجعة التواريخ المولدة تلقائيًا قبل المتابعة.</p>
+
+          <table class="dates-table">
+            <thead>
+              <tr><th>الإجراء</th><th>التاريخ</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>تاريخ الإصدار</td><td><input type="text" name="Issue_Date" value="{{ decisions['Issue_Date'].value or '' }}"></td></tr>
+              <tr><td>تأكيد المشاركة</td><td><input type="text" name="Participation_Confirmation_Letter" value="{{ decisions['Participation_Confirmation_Letter'].value or '' }}"></td></tr>
+              <tr><td>إرسال الأسئلة والاستفسارات</td><td><input type="text" name="Submission_of_Questions_and_Inquiries" value="{{ decisions['Submission_of_Questions_and_Inquiries'].value or '' }}"></td></tr>
+              <tr><td>تقديم العروض</td><td><input type="text" name="Submission_of_Proposals" value="{{ decisions['Submission_of_Proposals'].value or '' }}"></td></tr>
+              <tr><td>فتح العروض</td><td><input type="text" name="Opening_of_Proposals" value="{{ decisions['Opening_of_Proposals'].value or '' }}"></td></tr>
+              <tr><td>الترسية</td><td><input type="text" name="Award_Decision_Date" value="{{ decisions['Award_Decision_Date'].value or '' }}"></td></tr>
+              <tr><td>بدء الأعمال</td><td><input type="text" name="Commencement_of_Work" value="{{ decisions['Commencement_of_Work'].value or '' }}"></td></tr>
+            </tbody>
+          </table>
+
+          <div class="buttons">
+            <button type="button" class="nextBtn">التالي</button>
+          </div>
+        </div>
+
+        <!-- ================= القسم الثاني: المقدمة ================= -->
+        <div class="form-step">
+          <h3>المقدمة</h3>
+
+          <label>تعريف المنافسة</label>
+          <textarea name="Competition_Definition" rows="4">{{ decisions['Competition_Definition'].value or '' }}</textarea>
+
+          <label>نطاق العمل</label>
+          <textarea name="Project_Scope_of_Work" rows="4">{{ decisions['Project_Scope_of_Work'].value or '' }}</textarea>
+
+          <label>كيفية تنفيذ الخدمات</label>
+          <textarea name="Service_Execution_Method" rows="4">{{ decisions['Service_Execution_Method'].value or '' }}</textarea>
+
+          <label>خطة تقديم الخدمات</label>
+          <textarea name="Service_Delivery_Plan" rows="4">{{ decisions['Service_Delivery_Plan'].value or '' }}</textarea>
+
+          <div class="buttons">
+            <button type="button" class="prevBtn btn-secondary">السابق</button>
+            <button type="button" class="nextBtn">التالي</button>
+          </div>
+        </div>
+
+        <!-- ================= القسم الثالث: المتطلبات الفنية ================= -->
+        <div class="form-step">
+          <h3>المتطلبات الفنية</h3>
+
+          <label>العرض الفني</label>
+          <textarea name="Technical_Proposal_Documents" rows="4">{{ decisions['Technical_Proposal_Documents'].value or '' }}</textarea>
+
+          <label>العرض المالي</label>
+          <textarea name="Financial_Proposal_Documents" rows="4">{{ decisions['Financial_Proposal_Documents'].value or '' }}</textarea>
+
+          <label>معايير التقييم</label>
+          <textarea name="Bid_Evaluation_Criteria" rows="4">{{ decisions['Bid_Evaluation_Criteria'].value or '' }}</textarea>
+
+          <label>السجلات والتراخيص</label>
+          <textarea name="Regulatory_Records_and_Licenses" rows="4">{{ decisions['Regulatory_Records_and_Licenses'].value or '' }}</textarea>
+
+          <label>تجزئة المنافسة</label>
+          <textarea name="Tender_Split_Section" rows="4">{{ decisions['Tender_Split_Section'].value or '' }}</textarea>
+
+          <div class="buttons">
+            <button type="button" class="prevBtn btn-secondary">السابق</button>
+            <button type="button" class="nextBtn">التالي</button>
+          </div>
+        </div>
+
+        <!-- ================= القسم الرابع: الشروط والغرامات ================= -->
+        <div class="form-step">
+          <h3>الشروط والغرامات</h3>
+
+          <label>الغرامات</label>
+          <textarea name="Penalties" rows="4">{{ decisions['Penalties'].value or '' }}</textarea>
+
+          <label>غرامات التأخير</label>
+          <textarea name="Delay_Penalties" rows="4">{{ decisions['Delay_Penalties'].value or '' }}</textarea>
+
+          <label>التأمين</label>
+          <textarea name="Insurance" rows="4">{{ decisions['Insurance'].value or '' }}</textarea>
+
+          <label>التحالف المشترك</label>
+          <textarea name="Joint_Venture" rows="4">{{ decisions['Joint_Venture'].value or '' }}</textarea>
+
+          <div class="buttons">
+            <button type="button" class="prevBtn btn-secondary">السابق</button>
+            <button type="submit" id="saveBtn" class="generate-btn">حفظ وإنشاء الوثيقة</button>
+            <p id="waitMsg" class="loading-msg" style="display:none;">يتم الآن إنشاء الوثيقة <span id="dots"></span></p>
+          </div>
+        </div>
+
+        <!-- ✅ إخفاء بيانات المستخدم الأصلية -->
+        {% for key, value in user_data.items() %}
+          <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endfor %}
+      </form>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='generate.js') }}"></script>
+</body>
+</html>
