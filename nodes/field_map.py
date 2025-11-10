@@ -73,6 +73,9 @@ FIELD_MAP = {
     "Equipment_Specifications_Table":"llm",
     "Workers_Table":"llm",
     "Service_Execution_Method":"llm",
+    "Alternative_Offers":"llm",
+    "Bid_Coordination_Requirements":"llm",
+
 
 
 

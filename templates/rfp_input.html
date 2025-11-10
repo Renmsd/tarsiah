@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إنشاء RFP | Smart RFP AI</title>
-  
+
   <!-- 🔹 التنسيقات -->
   <link rel="stylesheet" href="{{ url_for('static', filename='input.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -27,8 +27,9 @@
 
   <!-- 🔹 المحتوى -->
   <div class="form-container">
-    <form id="rfpForm" action="/rfp_generate" method="post" novalidate>
 
+    <!-- ✅ هنا التغيير الوحيد: أزلنا action و method -->
+    <form id="rfpForm" novalidate>
 
       <!-- ✅ الخطوة 1: المقدمة -->
       <div class="form-step active">
@@ -90,7 +91,7 @@
         <input type="text" name="Bid_Submission_Time" placeholder="من الساعة 8 صباحاً إلى 12 ظهراً">
       </div>
 
-      <!-- ✅ الخطوة 2: إعداد العروض -->
+      <!-- ✅ الخطوة 2 -->
       <div class="form-step">
         <h2>متطلبات تقديم العروض</h2>
 
@@ -109,7 +110,6 @@
         <label>نسبة الضمان الابتدائي (%)</label>
         <input type="number" name="Initial_Guarantee_Percentage" placeholder="مثلاً: 5 %">
 
-        
         <h3>خيارات إضافية</h3>
 
         <label><input type="checkbox" name="include_Joint_Venture" checked> التضامن (افتراضي)</label><br>
@@ -117,72 +117,59 @@
         <label><input type="checkbox" name="include_Alternative_Offers"> العروض البديلة</label><br>
         <label><input type="checkbox" name="include_Insurance"> التأمينات</label><br>
 
-
         <h3>طبيعة المشروع</h3>
-
-
         <select name="Project_Type">
-  <option value="تشغيل وصيانة">تشغيل وصيانة</option>
-  <option value="استشارات">استشارات</option>
-  <option value="مشروع هندسي / إنشائي">مشروع هندسي / إنشائي</option>
-  <option value="تطوير أنظمة / مشروع تقني">تطوير أنظمة / مشروع تقني</option>
-</select>
+          <option value="تشغيل وصيانة">تشغيل وصيانة</option>
+          <option value="استشارات">استشارات</option>
+          <option value="مشروع هندسي / إنشائي">مشروع هندسي / إنشائي</option>
+          <option value="تطوير أنظمة / مشروع تقني">تطوير أنظمة / مشروع تقني</option>
+        </select>
 
-<h3>مدة المشروع (بالأشهر)</h3>
-<input type="number" name="Project_Duration" placeholder="مثلاً: 12">
+        <h3>مدة المشروع (بالأشهر)</h3>
+        <input type="number" name="Project_Duration" placeholder="مثلاً: 12">
 
-<h3>أسلوب الترسية</h3>
-<select name="Award_Method">
-  <option value="Best Technical Offer">الأفضل من الناحية الفنية</option>
-  <option value="Best Value">القيمة الأفضل</option>
-  <option value="Lowest Price">أقل سعر</option>
-</select>
+        <h3>أسلوب الترسية</h3>
+        <select name="Award_Method">
+          <option value="Best Technical Offer">الأفضل من الناحية الفنية</option>
+          <option value="Best Value">القيمة الأفضل</option>
+          <option value="Lowest Price">أقل سعر</option>
+        </select>
 
-<h3>هل يشمل المشروع توريد أجهزة أو معدات؟</h3>
-<select name="Includes_Equipment">
-  <option value="no">لا</option>
-  <option value="yes">نعم</option>
-</select>
+        <h3>هل يشمل المشروع توريد أجهزة أو معدات؟</h3>
+        <select name="Includes_Equipment">
+          <option value="no">لا</option>
+          <option value="yes">نعم</option>
+        </select>
 
-<label>متطلبات المحتوى المحلي (اختياري)</label>
-<input type="text" name="Local_Content_Requirements" placeholder="مثلاً: الالتزام بنسبة 30% محتوى محلي">
-
+        <label>متطلبات المحتوى المحلي (اختياري)</label>
+        <input type="text" name="Local_Content_Requirements" placeholder="مثلاً: الالتزام بنسبة 30% محتوى محلي">
       </div>
 
-      <!-- ✅ الخطوة 3: متطلبات التعاقد -->
+      <!-- ✅ الخطوة 3: الجزاءات -->
       <div class="form-step">
         <h2>شروط وأحكام التعاقد</h2>
 
         <h3>الغرامات والجزاءات</h3>
 
-        <p class="section-desc">اختاري نوع الجزاءات التي يجب أن تكون في الكراسة:</p>
-
         <div class="checkbox-group">
-
           <label><input type="checkbox" name="Penalty_Deduction"> الحسم من المستحقات المالية</label><br>
-
           <label><input type="checkbox" name="Penalty_Execute_On_Vendor"> تنفيذ الأعمال على حساب المتعاقد</label><br>
-
           <label><input type="checkbox" name="Penalty_Suspend"> إيقاف الأعمال مؤقتاً وإشعار المتعاقد</label><br>
-
           <label><input type="checkbox" name="Penalty_Termination"> سحب المشروع وفسخ العقد</label><br>
-
         </div>
 
-
         <label>نسبة إجمالي الغرامة من القيمة الإجمالية للعقد (%)</label>
-        <input type="number" name="Max_Penalty_Percentage" rows="3" placeholder="مثلاً: 20 %">
+        <input type="number" name="Max_Penalty_Percentage" placeholder="مثلاً: 20 %">
 
         <label>مكان عمل المشروع</label>
         <input type="text" name="Service_Execution_Location" placeholder="مثلاً: مدينة الرياض">
       </div>
 
-      <!-- ✅ الخطوة 4: جدول الكميات والأسعار -->
+      <!-- ✅ الخطوة 4: جدول الكميات -->
       <div class="form-step">
         <section class="table-generator quantities-section">
           <h3>🧾 جدول الكميات والأسعار</h3>
-          <p class="section-desc">أدخل المواد والكميات ليتم توليد جدول تلقائي</p>
-          <textarea id="quantitiesInput" rows="5" placeholder="أدخل المواد والكميات (مثلاً: حديد 10 طن بسعر 500 ريال)"></textarea>
+          <textarea id="quantitiesInput" rows="5" placeholder="أدخل المواد والكميات"></textarea>
 
           <div class="button-group">
             <button id="quantitiesGenerateBtn" type="button" class="btn-generate">⚙️ توليد الجدول</button>
@@ -190,7 +177,7 @@
           </div>
 
           <p id="quantitiesLoading" class="loading-msg" style="display:none;">جاري توليد الجدول...</p>
-          <div id="quantitiesTableContainer" class="generated-table-container" style="margin-top:20px;"></div>
+          <div id="quantitiesTableContainer" class="generated-table-container"></div>
         </section>
       </div>
 
@@ -198,8 +185,7 @@
       <div class="form-step">
         <section class="table-generator materials-section">
           <h3>⚙️ جدول مواصفات المواد</h3>
-          <p class="section-desc">أدخل البنود والمواصفات الفنية ليتم توليد الجدول</p>
-          <textarea id="materialsInput" rows="5" placeholder="مثلاً: خرسانة فئة C30 بسماكة 20 سم مع حديد تسليح 12 مم"></textarea>
+          <textarea id="materialsInput" rows="5" placeholder="مثلاً: خرسانة فئة C30 بسماكة 20 سم"></textarea>
 
           <div class="button-group">
             <button id="materialsGenerateBtn" type="button" class="btn-generate">⚙️ توليد الجدول</button>
@@ -207,16 +193,15 @@
           </div>
 
           <p id="materialsLoading" class="loading-msg" style="display:none;">جاري توليد الجدول...</p>
-          <div id="materialsTableContainer" class="generated-table-container" style="margin-top:20px;"></div>
+          <div id="materialsTableContainer" class="generated-table-container"></div>
         </section>
       </div>
 
-      <!-- ✅ الخطوة 6: جدول مواصفات المعدات -->
+      <!-- ✅ الخطوة 6: جدول المعدات -->
       <div class="form-step">
         <section class="table-generator equipment-section">
           <h3>🔧 جدول مواصفات المعدات</h3>
-          <p class="section-desc">أدخل أسماء المعدات وكمياتها ليتم توليد الجدول</p>
-          <textarea id="equipmentInput" rows="5" placeholder="مثلاً: حفارة 2 وحدة ، رافعة 1 وحدة"></textarea>
+          <textarea id="equipmentInput" rows="5" placeholder="مثلاً: حفارة 2 ، رافعة 1"></textarea>
 
           <div class="button-group">
             <button id="equipmentGenerateBtn" type="button" class="btn-generate">⚙️ توليد الجدول</button>
@@ -224,11 +209,29 @@
           </div>
 
           <p id="equipmentLoading" class="loading-msg" style="display:none;">جاري توليد الجدول...</p>
-          <div id="equipmentTableContainer" class="generated-table-container" style="margin-top:20px;"></div>
+          <div id="equipmentTableContainer" class="generated-table-container"></div>
         </section>
       </div>
 
-      <!-- ✅ الخطوة 7: المراجعة -->
+      <!-- ✅ الخطوة 7: جدول العمال -->
+      <div class="form-step">
+        <section class="table-generator workers-section">
+          <h3>👷 جدول العمال</h3>
+
+          <textarea id="workersInput" rows="5"
+            placeholder="مثلاً: فني كهرباء 2 ، عامل نظافة 5 ، مهندس موقع 1"></textarea>
+
+          <div class="button-group">
+            <button id="workersGenerateBtn" type="button" class="btn-generate">⚙️ توليد الجدول</button>
+            <button id="workersSaveBtn" type="button" class="btn-save" style="display:none;">💾 حفظ الجدول</button>
+          </div>
+
+          <p id="workersLoading" class="loading-msg" style="display:none;">جاري توليد الجدول...</p>
+          <div id="workersTableContainer" class="generated-table-container"></div>
+        </section>
+      </div>
+
+      <!-- ✅ الخطوة 8: المراجعة -->
       <div class="form-step">
         <h2>مراجعة وإنشاء RFP</h2>
         <div class="review-header">
@@ -238,13 +241,11 @@
         <div class="review-box" id="review-box"></div>
 
         <div class="generate-section">
-          <p id="errorMsg">⚠️ يرجى إدخال اسم الجهة الحكومية واسم المنافسة</p>
-          <button type="submit" id="generateBtn" class="generate-btn">إنشاء وثيقة RFP</button>
-          <p id="loadingText" class="loading-msg">جارٍ إنشاء الوثيقة <span id="dots"></span></p>
+          <button type="button" id="generateBtn" class="generate-btn">إنشاء وثيقة RFP</button>
+          <p id="loadingText" class="loading-msg" style="display:none;">جارٍ إنشاء الوثيقة <span id="dots"></span></p>
         </div>
       </div>
 
-      <!-- 🔹 أزرار التنقل (خارج جميع الخطوات) -->
       <div class="form-navigation">
         <button type="button" id="prevBtn">السابق</button>
         <button type="button" id="nextBtn">التالي</button>
@@ -253,8 +254,48 @@
     </form>
   </div>
 
-
-  <!-- 🔹 السكربت -->
+  <!-- ✅ السكربتات -->
   <script src="{{ url_for('static', filename='input.js') }}"></script>
+
+
+  <!-- ✅ السكربت الذي يدعم Streaming عبر SSE -->
+  <script>
+document.getElementById("generateBtn").addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const form = document.getElementById("rfpForm");
+    const formData = new FormData(form);
+
+    const params = new URLSearchParams();
+    for (const pair of formData.entries()) {
+        params.append(pair[0], pair[1]);
+    }
+
+    document.getElementById("loadingText").style.display = "block";
+    document.getElementById("generateBtn").disabled = true;
+
+    const evtSource = new EventSource(`/rfp_generate?${params.toString()}`);
+
+    evtSource.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+
+        if (data.decisions) {
+            document.getElementById("review-box").innerHTML =
+                "<pre>" + JSON.stringify(data.decisions, null, 2) + "</pre>";
+        }
+
+        if (data.done === true) {
+            evtSource.close();
+            window.location.href = "/rfp_generate_done";
+        }
+    };
+
+    evtSource.onerror = function(err) {
+        console.error("❌ Stream Error:", err);
+        evtSource.close();
+    };
+});
+  </script>
+
 </body>
 </html>
