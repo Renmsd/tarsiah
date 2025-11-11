@@ -11,7 +11,6 @@ import json
 # 🧠 تحميل المتغيرات البيئية (API Keys)
 # ============================================================
 load_dotenv()
-
 api_key = os.environ.get("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("❌ لم يتم العثور على OPENAI_API_KEY في ملف .env")

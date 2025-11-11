@@ -4,7 +4,9 @@ from graph1 import run_graph, llm  # type: ignore
 import os
 table_bp = Blueprint("table_bp", __name__)
 
-api_key = os.environ.get("OPENAI_API_KEY")
+# api_key = os.environ.get("OPENAI_API_KEY")
+
+api_key = os.environ.get("api_key")
 
 if not api_key:
     raise ValueError("❌ لم يتم العثور على OPENAI_API_KEY في ملف .env")
