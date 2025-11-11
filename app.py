@@ -1,3 +1,4 @@
+#app
 # -*- coding: utf-8 -*-
 import os
 import json
@@ -81,10 +82,28 @@ def generate():
         return render_template("rfp_generate.html", decisions={}, user_data=user_data)
 
     from nodes.field_map import FIELD_MAP  # type: ignore
-    filtered_decisions = {
-        key: {"value": decisions.get(key, ""), "type": FIELD_MAP.get(key, "llm")}
-        for key in FIELD_MAP
-    }
+    filtered_decisions = {}
+    for key in FIELD_MAP:
+        filtered_decisions[key] = {
+            "value": decisions.get(key, ""),  # حتى لو null
+            "type": FIELD_MAP.get(key, "llm")
+
+        }
+
+
+    # ✅ ضمان وجود تواريخ حتى لو فشل الـ graph أو كانت فارغة
+    for date_key in [
+        "Issue_Date",
+        "Participation_Confirmation_Letter",
+        "Submission_of_Questions_and_Inquiries",
+        "Submission_of_Proposals",
+        "Opening_of_Proposals",
+        "Award_Decision_Date",
+        "Commencement_of_Work",
+    ]:
+        filtered_decisions.setdefault(date_key, {"value": "", "type": "static"})
+
+    
     session["user_data"] = user_data
     session["decisions"] = {k: v["value"] for k, v in filtered_decisions.items()}
     return render_template("rfp_generate.html", decisions=filtered_decisions, user_data=user_data)
@@ -98,6 +117,7 @@ def save():
     context = {**session_user, **session_llm, **edited_data}
 
     tpl = DocxTemplate("templates/rfp_general.docx")
+    tpl.render(context)
 
     TABLE_KEYS = {
         "Bill_of_Quantities_and_Prices",

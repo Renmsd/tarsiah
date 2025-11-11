@@ -35,7 +35,7 @@ FIELD_MAP = {
     "Award_Method": "input",
     "Includes_Equipment": "input",
     "Local_Content_Requirements": "input",
-    "Penalty_Deduction": "input",
+    # "Penalty_Deduction": "input",
     "Penalty_Execute_On_Vendor": "input",
     "Penalty_Suspend": "input",
     "Penalty_Termination": "input",
@@ -43,7 +43,7 @@ FIELD_MAP = {
 
 
     # ⚙️ Automatically Generated (functions)
-    "Issue_Date" : "function",
+    # "Issue_Date" : "function",
     "Participation_Confirmation_Letter" :  "function",
     "Submission_of_Questions_and_Inquiries" :  "function",
     "Submission_of_Proposals" : "function",

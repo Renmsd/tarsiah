@@ -3,17 +3,14 @@ from langchain_openai import ChatOpenAI  # type: ignore
 from graph1 import run_graph, llm  # type: ignore
 import os
 table_bp = Blueprint("table_bp", __name__)
+from dotenv import load_dotenv
 
-# api_key = os.environ.get("OPENAI_API_KEY")
+load_dotenv()
 
-api_key = os.environ.get("api_key")
-
-if not api_key:
-    raise ValueError("❌ لم يتم العثور على OPENAI_API_KEY في ملف .env")
 
 
 def generate_table_from_text(user_input: str):
-    llm_instance = ChatOpenAI(model="gpt-5-mini", temperature=0.3, api_key=api_key)
+    llm_instance = ChatOpenAI(model="gpt-5-mini", temperature=0.3)
     prompt = f"""
         أنت مساعد ذكي متخصص في استخراج الجداول من النصوص العربية.
 

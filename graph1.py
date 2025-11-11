@@ -1,3 +1,4 @@
+#graph1.py
 from nodes.orchestrator_graph import build_orchestrator_graph
 from nodes.render_node import render_node
 from langgraph.graph import StateGraph,START, END
@@ -11,17 +12,13 @@ import json
 # 🧠 تحميل المتغيرات البيئية (API Keys)
 # ============================================================
 load_dotenv()
-api_key = os.environ.get("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("❌ لم يتم العثور على OPENAI_API_KEY في ملف .env")
 
 # ============================================================
 # 🤖 إعداد النموذج
 # ============================================================
 llm = ChatOpenAI(
     model="gpt-5-mini",
-    temperature=0.3,
-    api_key=api_key
+    temperature=0.3
 )
 
 def get_llm():
@@ -52,17 +49,31 @@ app = build_main_app()
 
 def run_graph(user_data: dict):
     """
-    🔹 دالة بسيطة لاستدعاء LangGraph من Flask
+    ✅ استدعاء LangGraph بشكل صحيح وتمرير الـ user input في raw_input
     """
     print("⚙️ تشغيل LangGraph...")
+    print("🔥 USER DATA RECEIVED BY GRAPH:", user_data)
+
+    initial_state = {
+        "raw_input": user_data,    # ← هنا ندخل بيانات المستخدم
+        "decisions": {},           # ← يملؤها orchestrator
+        "sections": [],            # ← ليتم تعبئتها بناءً على الـ FIELD_MAP
+        "completed_sections": []   # ← مطلوب من StateGraph
+    }
+
     result = {}
+
     try:
-        for event in app.stream({"messages": [("user", str(user_data))]}):
+        for event in app.stream(initial_state):  # ✅ لا تمريّرس messages هنا
             for value in event.values():
                 result.update(value)
     except Exception as e:
         print("❌ خطأ أثناء تشغيل LangGraph:", e)
+
     return result
+
+
+
 
 
 
