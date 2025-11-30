@@ -90,3 +90,59 @@ h2 {
   background-color: #3f7684;
   box-shadow: 0 0 10px rgba(0, 188, 212, 0.4);
 }
+
+/* ======================= 📱 تصميم الجوال والتابلت ======================= */
+@media (max-width: 768px) {
+
+  body {
+    padding: 0 15px;
+    height: auto;
+  }
+
+  .container {
+    width: 100%;
+    padding: 35px 25px;
+    margin-top: 120px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  .desc {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .back-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+
+/* ======================= 📱 جوالات صغيرة جدًا (آيفون SE) ======================= */
+@media (max-width: 480px) {
+
+  .container {
+    padding: 28px 20px;
+    margin-top: 150px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .desc {
+    font-size: 14px;
+  }
+
+  .download-link {
+    font-size: 15px;
+  }
+
+  .back-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+}

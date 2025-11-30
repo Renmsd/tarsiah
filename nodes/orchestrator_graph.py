@@ -7,9 +7,10 @@ import operator
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
-# ---------------------------
-# ✅ تعريف الحالة العامة للـ Graph
-# ---------------------------
+
+# -----------------------------------------------------
+# ✅ شكل الحالة (State) داخل LangGraph
+# -----------------------------------------------------
 class State(TypedDict):
     raw_input: str
     decisions: dict
@@ -17,14 +18,11 @@ class State(TypedDict):
     completed_sections: Annotated[list, operator.add]
 
 
-# ---------------------------
-# ✅ تواريخ تلقائية (الجدول الزمني)
-# ---------------------------
+# -----------------------------------------------------
+# ✅ تواريخ تلقائية حسب Issue_Date
+# -----------------------------------------------------
 def generate_auto_dates(issue_date: str | None):
-    """
-    إذا المستخدم أدخل Issue_Date → نحسب التواريخ بناءً عليها,
-    إذا لم يدخل → نستخدم تاريخ اليوم.
-    """
+    """يعتمد على Issue_Date، وإذا لم يوجد يستخدم تاريخ اليوم"""
     if issue_date:
         base = datetime.strptime(issue_date, "%Y-%m-%d")
     else:
@@ -41,150 +39,185 @@ def generate_auto_dates(issue_date: str | None):
     }
 
 
-
-# ---------------------------
-# ✅ استدعاء LLM (متوافق sync/async)
-# ---------------------------
-async def _call_llm_async(llm, prompt):
+# -----------------------------------------------------
+# ✅ استدعاء LLM (يدعم async/sync)
+# -----------------------------------------------------
+async def _call_llm_async(llm, prompt: str) -> str:
+    """يدعم llm.invoke و llm.ainvoke تلقائياً"""
+    # الطريقة الأولى: async مباشرة
     if hasattr(llm, "ainvoke"):
         try:
-            result = await llm.ainvoke(prompt)
-            return getattr(result, "content", result).strip()
+            res = await llm.ainvoke(prompt)
+            return getattr(res, "content", res).strip()
         except Exception:
             pass
 
+    # الطريقة الثانية: تشغيل invoke داخل ThreadPool
     loop = asyncio.get_running_loop()
 
     def sync():
         try:
-            result = llm.invoke(prompt)
-            return getattr(result, "content", result).strip()
+            res = llm.invoke(prompt)
+            return getattr(res, "content", res).strip()
         except Exception:
             return "تعذر توليد الفقرة بسبب خطأ تقني."
 
     return await loop.run_in_executor(ThreadPoolExecutor(max_workers=6), sync)
 
 
-# ---------------------------
-# ✅ orchestrator: يحضّر البيانات واختيار ال sections
-# ---------------------------
+# -----------------------------------------------------
+# ✅ orchestrator — تجهيز البيانات وتحديد الأقسام المراد توليدها
+# -----------------------------------------------------
 def orchestrator(state: State):
     from flask import session
 
-    # ✅ يجب أن يكون لدينا decisions
     state.setdefault("decisions", {})
     decisions = state["decisions"]
 
-    # ✅ raw_input يأتي من run_graph(user_data)
     raw = state.get("raw_input")
 
-    # ✅ إذا raw dict → ندمجه مباشرة
     if isinstance(raw, dict):
         decisions.update(raw)
-
-    # ✅ إذا raw string JSON → نحوله ونضيفه
     elif isinstance(raw, str):
         try:
             import json
             decisions.update(json.loads(raw))
         except Exception:
             pass
-    # ✅ ضمان وجود مفاتيح الجزاءات حتى لو المستخدم ما اختار شيء
-    for key in ["Penalty_Deduction", "Penalty_Execute_On_Vendor", "Penalty_Suspend", "Penalty_Termination"]:
-        decisions.setdefault(key, "")
 
+    # ضمان مفاتيح الجزاءات حتى لو المستخدم لم يختَر شيئًا
+    for k in ["Penalty_Deduction", "Penalty_Execute_On_Vendor", "Penalty_Suspend", "Penalty_Termination"]:
+        decisions.setdefault(k, "")
 
-    # ✅ تواريخ تلقائية
-    issue_date_input = decisions.get("Issue_Date")
-    decisions.update(generate_auto_dates(issue_date_input))
+    # إضافة التواريخ التلقائية
+    decisions.update(generate_auto_dates(decisions.get("Issue_Date")))
 
-    # ✅ تحكم الأقسام اختيارية حسب checkbox
+    # اختيار الـ sections وفق checkbox من المستخدم
     include = session.get("include_sections", {})
     sections = []
 
     for key, v in FIELD_MAP.items():
         if v == "llm":
-            # إذا القسم اختياري ولم يتم تفعيله → تجاهله
+            # القسم اختياري وتم إزالته → skip
             if key in include and not include[key]:
                 print(f"🚫 SKIP section: {key}")
                 continue
 
             sections.append(key)
-        # ✅ Inject raw_input into decisions so PROMPTS can use {raw_input}
+
     decisions["raw_input"] = state.get("raw_input")
 
-
-    return {
-        "sections": sections,
-        "decisions": decisions
-    }
+    return {"sections": sections, "decisions": decisions}
 
 
+# -----------------------------------------------------
+# ✅ توليد الفقرات بالتوازي + Bid Evaluation يعتمد على الفني والمالي
+# -----------------------------------------------------
+async def generate_sections_async(llm, prompts, sections, d):
+    completed = {}
 
-# ---------------------------
-# ✅ توليد كل الفقرات (بالتوازي للسرعة)
-# ---------------------------
-# ---------------------------
-# ✅ توليد كل الفقرات (بالتوازي للسرعة) + DEBUG
-# ---------------------------
-def generate_all_sections(state, llm):
-    from flask import session
+    independent = [s for s in sections if s in prompts and s != "Bid_Evaluation_Criteria"]
 
-    state.setdefault("decisions", {})
-    d = state["decisions"]
-    sections = state.get("sections", [])
-
-    # ✅ DEBUG — عرض البيانات التي تصل للـ LLM
-    print("\n============================")
-    print("✅ DEBUG | Decisions sent to LLM:")
-    for k, v in d.items():
-        print(f" - {k}: {v}")
-    print("============================\n")
-
-    from nodes.prompts import PROMPTS
-
-    async def _parallel_generate():
-        tasks, keys = [], []
-
-        for sec in sections:
-            if sec in PROMPTS:
-                prompt = PROMPTS[sec].format(**d)
-
-                # ✅ DEBUG — طباعة البرومبت الفعلي قبل الإرسال
-                print(f"\n🟦 Generating section: {sec}")
-                print("🔹 Final Prompt Sent to LLM:\n")
-                print(prompt)
-                print("---------------------------------------------------\n")
-
-                tasks.append(_call_llm_async(llm, prompt))
-                keys.append(sec)
+    async def _generate_parallel():
+        tasks = []
+        for sec in independent:
+            prompt = prompts[sec].format(**d)
+            print(f"\n🟦 Generating: {sec}")
+            print("🔹 Final Prompt Sent:\n", prompt)
+            print("---------------------------------------------------\n")
+            tasks.append(_call_llm_async(llm, prompt))
 
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
-        for sec, result in zip(keys, results):
-            d[sec] = result if isinstance(result, str) else "تعذر توليد النص."
+        for sec, res in zip(independent, results):
+            completed[sec] = res if isinstance(res, str) else "تعذر توليد النص."
+
+        d.update(completed)
+
+        # الآن نولّد Bid Evaluation Criteria بعد الفني والمالي
+        if "Bid_Evaluation_Criteria" in sections:
+            tech = d.get("Technical_Proposal_Documents", "")
+            fin = d.get("Financial_Proposal_Documents", "")
+
+            eval_prompt = f"""
+تحليل المحتوى التالي لاستخراج عناصر التقييم:
+
+العرض الفني:
+{tech}
+
+العرض المالي:
+{fin}
+
+المطلوب:
+
+إنشاء نموذج "معايير تقييم العروض" جاهز للإدراج في كراسة الشروط.
+
+التوجيهات:
+
+أولا تقسيم المعايير إلى مستويين فقط:
+- المستوى الأول: تقييم فني
+- المستوى الثاني: تقييم مالي
+
+ثانيا استخراج عناصر التقييم من محتوى العرض الفني والمالي أعلاه، وليس من خيالك.
+لا تتجاوز خمسة عناصر فنية وعنصرين ماليين.
+
+ثالثا توزيع النقاط يتم حسب طريقة الترسية الموضحة في الإدخال Award_Method:{d.get("Award_Method")}
+
+
+- إذا كانت الترسية تعتمد على أفضل عرض فني فقط Best Technical Offer فليكن التركيز الأكبر للنقاط في الجانب الفني مع حصة بسيطة للمالي
+- إذا كانت Best Value فيجب توزيع النقاط بشكل متوازن بين الفني والمالي
+- إذا كانت Lowest Price فيكون الجانب المالي هو الأعلى وزنا ويكون الفني داعما
+
+رابعا إخراج النتيجة في جدول فقط يحتوي الأعمدة:
+المستوى الأول | المستوى الثاني | الوزن | النقاط
+
+خامسا يمنع كتابة شرح أو فقرات أو تعريفات. الجدول فقط.
+
+ثامنا مهم جدا:
+يمنع استخدام الأقواس بجميع أنواعها سواء كانت دائرية أو مربعة أو معقوفة.
+اكتب النص بدون أي أقواس.
+
+أخيرا اختم بجملة رسمية:
+يتم ترسية المنافسة على العرض الحاصل على أعلى مجموع نقاط بعد التقييم الفني والمالي.
+"""
+
+
+
+            result = await _call_llm_async(llm, eval_prompt)
+            d["Bid_Evaluation_Criteria"] = result
+
+        return d
+
+    return await _generate_parallel()
+
+
+def generate_all_sections(state, llm):
+    from nodes.prompts import PROMPTS
+
+    d = state["decisions"]
+    sections = state["sections"]
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(_parallel_generate())
+    new_decisions = loop.run_until_complete(generate_sections_async(llm, PROMPTS, sections, d))
     loop.close()
 
-    return {"decisions": d}
+    return {"decisions": new_decisions}
 
 
-
-# ---------------------------
-# ✅ synthesize output
-# ---------------------------
+# -----------------------------------------------------
+# ✅ synthesizer — إعادة القرارات كـ output نهائي للـ Graph
+# -----------------------------------------------------
 def synthesizer(state):
-    return {"decisions": state.get("decisions", {})}
+    return {"decisions": state["decisions"]}
 
 
-# ---------------------------
-# ✅ build graph
-# ---------------------------
+# -----------------------------------------------------
+# ✅ بناء LangGraph
+# -----------------------------------------------------
 def build_orchestrator_graph(llm):
     g = StateGraph(State)
+
     g.add_node("orchestrator", orchestrator)
     g.add_node("generate_all_sections", lambda s: generate_all_sections(s, llm))
     g.add_node("synthesizer", synthesizer)

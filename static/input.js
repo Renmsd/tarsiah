@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const fieldNamesArabic = {
     Competition_Name: "اسم المنافسة",
     Booklet_Number: "رقم الكراسة",
-    Announcement_Date: "تاريخ طرح الكراسة",
+    Issue_Date: "تاريخ طرح الكراسة",
     Government_Agency: "الجهة الحكومية",
     Competition_Document_Fees: "تكاليف وثائق المنافسة (ريال)",
     Payment_Method: "آلية الدفع",
@@ -32,8 +32,25 @@ document.addEventListener("DOMContentLoaded", function () {
     Bid_Submission_Floor: "الطابق",
     Bid_Submission_Department_Name: "الغرفة / الإدارة",
     Bid_Submission_Time: "وقت التسليم",
-    Inquiry_Response_Period: "فترة الرد على الاستفسارات",
+    Post_Qualification:"ملحق معايير التأهيل",
+    Inquiry_Submission_period:"فتره ارسال الاسئله والاستفسارات",
+    Inquiry_Response_Period: "فترة الاجابة على الاسئلة و الاستفسارات",
+    Inquiry_Email:"البريد الالكتروني للرد على الاسئله والاستفسارات",
     Initial_Guarantee_Percentage: "نسبة الضمان الابتدائي",
+    include_Joint_Venture:"التضامن",
+    include_Tender_Split_Section:"تجزئه المنافسة",
+    include_Alternative_Offers:"العروض البديلة",
+    include_Insurance:"التأمينات",
+    Project_Type:"طبيعة المشروع",
+    Project_Duration:"مده المشروع",
+    Award_Method:"اسلوب الترسيه",
+    Includes_Equipment:"هل يشمل المشروع توريد اجهزه او معدات؟",
+    Local_Content_Requirements:"متطلبات المحتوى المحلي ",
+    Penalty_Deduction:"الخصم من مستحقات المالية",
+    Penalty_Execute_On_Vendor:"تنفيذ الأعمال على حساب المتعاقد",
+    Penalty_Suspend:"ابقاف الاعمال مؤقتا وإشعار المتعاقد",
+    Penalty_Termination:"سحب المشروع وفسخ العقد",
+    Max_Penalty_Percentage:"اجمالي الغرامة من القيمة الاجمالية للعقد(%)",
     Service_Execution_Location: "مكان تنفيذ الأعمال"
   };
 
@@ -104,16 +121,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const competition = document.querySelector("[name='Competition_Name']");
 
     // 🔸 التحقق من الحقول المطلوبة فقط
-    // if (!agency.value.trim() || !competition.value.trim()) {
-    //   e.preventDefault();
-    //   errorMsg.style.display = "block";
-    //   errorMsg.classList.remove("fade-out"); 
-    //   setTimeout(() => {
-    //     errorMsg.classList.add("fade-out");
-    //     setTimeout(() => (errorMsg.style.display = "none"), 600);
-    //   }, 5000);
-    //   return;
-    // }
+    if (!agency.value.trim() || !competition.value.trim()) {
+      e.preventDefault();
+      errorMsg.style.display = "block";
+      errorMsg.classList.remove("fade-out"); 
+      setTimeout(() => {
+        errorMsg.classList.add("fade-out");
+        setTimeout(() => (errorMsg.style.display = "none"), 600);
+      }, 5000);
+      return;
+    }
 
 
 
@@ -165,12 +182,58 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
       document.getElementById(outputId).innerHTML = data.html;
+      // ✅ أضف كلاس التصميم الجديد إلى الجدول المولد
+      const table = document.querySelector(`#${outputId} table`);
+      if (table) table.classList.add("dates-table");
+
+      makeTableEditable(outputId); 
+      
       document.getElementById(saveBtnId).style.display = "inline-block";
     } catch (err) {
       console.error("خطأ أثناء الاتصال:", err);
       document.getElementById(loadingId).style.display = "none";
     }
   }
+// ✅ تعديل اسم العمود مباشرة داخل الجدول
+  function makeTableEditable(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const table = container.querySelector("table");
+  if (!table) return;
+
+  const headers = table.querySelectorAll("th");
+  if (!headers.length) return; // ✅ حماية إضافية
+
+  headers.forEach(th => {
+    th.style.cursor = "text";
+    th.title = "انقر مرتين لتعديل اسم العمود ✏️";
+
+    th.addEventListener("dblclick", () => {
+      const oldText = th.textContent.trim();
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = oldText;
+      input.className = "edit-header-input";
+
+      th.textContent = "";
+      th.appendChild(input);
+      input.focus();
+
+      input.addEventListener("blur", () => {
+        const newText = input.value.trim() || oldText;
+        th.textContent = newText;
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === "Escape") {
+          input.blur();
+        }
+      });
+    });
+  });
+}
+
 
   // ✅ حفظ أي جدول من الصفحة
   async function saveTable(outputId, tableName) {
@@ -245,21 +308,21 @@ document.addEventListener("DOMContentLoaded", function () {
     saveTable("equipmentTableContainer", "Equipment_Specifications_Table");
   });
 
-  // ==============================
-// 👷 جدول العمال (Workers Table)
-// ==============================
-document.getElementById("workersGenerateBtn").addEventListener("click", () => {
-  generateTable(
-    "/generate_table/workers",
-    "workersInput",
-    "workersTableContainer",
-    "workersSaveBtn",
-    "workersLoading"
-  );
-});
+    // ==============================
+   // 👷 جدول العمال (Workers Table)
+   // ==============================
+  document.getElementById("workersGenerateBtn").addEventListener("click", () => {
+    generateTable(
+      "/generate_table/workers",
+      "workersInput",
+      "workersTableContainer",
+      "workersSaveBtn",
+      "workersLoading"
+    );
+  });
 
-document.getElementById("workersSaveBtn").addEventListener("click", () => {
-  saveTable("workersTableContainer", "Workers_Table");
-});
+  document.getElementById("workersSaveBtn").addEventListener("click", () => {
+    saveTable("workersTableContainer", "Workers_Table");
+  });
 
 

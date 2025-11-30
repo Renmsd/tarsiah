@@ -57,72 +57,38 @@ body::before {
 
 /* ======================= الهيدر ======================= */
 .topbar {
+  width: 100%;
+  height: 70px;
+  padding: 0 20px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background-color: #547f8534;
-  padding: 12px 30px;
-  color: #ffffff;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-.logo {
-  font-size: 19px;
-  font-weight: bold;
-  color: #ffffff;
-  /* text-shadow: 
-    0 0 10px rgba(0, 255, 255, 0.7), 
-    0 0 20px rgba(0, 255, 255, 0.5), 
-    0 0 40px rgba(0, 255, 255, 0.3); */
-  transition: all 0.3s ease;
+  background: rgba(0, 13, 16, 0.381);
+  backdrop-filter: blur(6px);
 }
 
-/* لما تمرين الماوس عليه يصير اللمع أقوى */
-.logo:hover {
-  text-shadow: 
-    0 0 15px rgb(153, 164, 164), 
-    0 0 3px rgba(152, 165, 165, 0.9), 
-    0 0 50px rgba(144, 158, 158, 0.8);
-  transform: scale(1.05);
-}
-
-
-.topbar-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 35px;
-  flex-grow: 1;
-  text-align: center;
-}
-
-.topbar-center a {
-  text-decoration: none;
-  color: #ffffff;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  font-size: 15px;
-}
-
-.topbar-center a:hover,
-.topbar-center .active {
-  color: #ffffff;
-  border-bottom: 2px solid #ffffff;
-}
-
-.topbar-left {
+/* اللوقو */
+.topbar-right {
   display: flex;
   align-items: center;
-  gap: 20px;
-  flex-direction: row-reverse;
-  margin-left: 50px;
-  margin-right: 50px;
+  justify-content: flex-start;
+  flex: 0.5; /* ← بدل 1 تاخذ نص مساحة فقط */
 }
+
+/* حرّك اللوقو شوي يسار */
+.logo img {
+  height: 80px;
+  margin-left: 20px;
+  margin-right:30px; /* ← هذا اللي يحركه يسار */
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+}
+
 
 /* ===== أيقونات المستخدم واللغة ===== */
 .lang-icon,
@@ -157,57 +123,80 @@ body::before {
 .dropdown-content {
   display: none;
   position: absolute;
-  right: 0;
-  top: 40px;
-  background-color: #d3d2d636; /* نفس لون الخلفية العامة */
-  border: 1px solid rgba(236, 229, 229, 0.956);
-  border-radius: 2px;
-  box-shadow: 0 4px 12px rgba(213, 212, 212, 0.5);
-  min-width: 119px;
-  overflow: hidden;
-  z-index: 9999;
-  
- 
+  top: 48px;              /* 🔹 أسفل الأيقونة مباشرة */
+  right: -80px;           /* 🔹 تبعد شوي لليسار حتى ما تنقص */
+  background-color: rgba(111, 111, 111, 0.95);
+  border: 1px solid rgba(55, 55, 55, 0.25);
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(64, 64, 64, 0.6);
+  min-width: 170px;       /* 🔹 زيادة عرضها */
+  padding: 1px 0;
+  z-index: 999999;
+  overflow: visible;
+  backdrop-filter: blur(10px);
+  animation: dropdownFade 0.25s ease;
+  text-align: right;
 }
 
+/* ✨ الحركة الانسيابية */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* العنوان */
 .dropdown-content span {
   display: block;
-  padding: 4px;
-  left: 0;
+  padding: 8px 12px;
   font-weight: 600;
   color: #ffffff;
-  background-color: #d6d2d236; /* نفس لون الهيدر */
-  border-bottom: 1px solid #ffffff58;
-  
+  background-color: rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 13px;
+  border-radius: 8px 8px 0 0;
 }
 
+/* الروابط */
 .dropdown-content a {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 8px;
-  color: #f0f0f0;
+  color: #ffffff;
   text-decoration: none;
   padding: 10px 12px;
-  font-size: 10px;
-  transition: background-color 0.3s;
+  font-size: 13px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.dropdown-content a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(-3px);
 }
 
-.dropdown-content a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
 
 /* ======================= الأقسام ======================= */
 .container {
   display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 2rem;
+  padding: 2rem;
   width: 90%;
   max-width: 1200px;
-  height: 80vh;
+  min-height: 80vh;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   margin: 100px auto 60px auto;
 }
 
+/* القسم الأيسر */
 .left-section {
   flex: 1;
   background-color: #200d3323;
@@ -219,6 +208,7 @@ body::before {
   padding: 40px;
 }
 
+/* البطاقات */
 .card {
   background-color: #63adb750;
   color: rgb(255, 255, 255);
@@ -240,13 +230,20 @@ body::before {
   color: #bcd4f6;
 }
 
+/* القسم الأيمن */
 .right-section {
   flex: 1;
-  background-color: #1c0b2b87;
+  background: linear-gradient(
+    180deg,
+    rgba(28, 11, 43, 0.85) 0%,
+    rgba(28, 11, 43, 0.75) 100%
+  );
+  border-radius: 12px;
   padding: 80px 60px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: right;
 }
 .right-section h1 {
   color: #ffffff;
@@ -265,59 +262,50 @@ body::before {
   margin-bottom: 25px;
   line-height: 1.8;
 }
+
+/* التعداد */
 .features {
   list-style: none;
   padding: 0;
+  margin-right: 10px;
+  text-align: right;
 }
 .features li {
   position: relative;
-  padding-right: 20px;
-  margin-bottom: 12px;
-  color: #fff;
+  padding-right: 18px;
+  margin-bottom: 10px;
   font-size: 15px;
+  color: #fff;
 }
 .features li::before {
-  content: "";
+  content: "•";
+  color: #b784ff;
   position: absolute;
   right: 0;
-  top: 7px;
-  width: 8px;
-  height: 8px;
-  background-color: #498898;
-  border-radius: 50%;
-}
-body[dir="ltr"] .features li {
-  padding-left: 20px;
-  padding-right: 0;
-}
-body[dir="ltr"] .features li::before {
-  left: 0;
-  right: auto;
+  top: 0;
 }
 
-/* ======================= قسم آخر المشاريع ======================= */
+/* ======================= 📊 آخر المشاريع ======================= */
 .recent-projects-section {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 60px; /* مسافة بين الكروت والجدول */
-  margin-bottom: 80px; /* مسافة من أسفل الصفحة */
+  margin-top: 60px;
+  margin-bottom: 80px;
 }
-
 .recent-projects {
   width: 85%;
   max-width: 1100px;
-  background-color: #200d3323; /* أزرق غامق جدًا متناسق مع الكروت */
+  background-color: #200d3323;
   border-radius: 12px;
   padding: 25px 30px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   text-align: right;
-  color: #ffffff; /* الخط أبيض */
-  border: 1px solid #1f2e48; /* إطار خفيف */
+  color: #ffffff;
+  border: 1px solid #1f2e48;
 }
-
 .recent-projects h3 {
-  color: #f2f4f6; /* أزرق فاتح مثل العناوين فوق */
+  color: #f2f4f6;
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -325,26 +313,20 @@ body[dir="ltr"] .features li::before {
   align-items: center;
   gap: 6px;
 }
-
-/* ===== الجدول ===== */
 .projects-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #200d3323; /* أزرق غامق داخل الجدول */
+  background-color: #200d3323;
   border-radius: 10px;
-  overflow: hidden;
   color: #ffffff;
 }
-
 .projects-table th {
-  background-color: #63adb750; /* صف العناوين أزرق متوسط */
+  background-color: #63adb750;
   color: #e6efff;
   padding: 12px;
   border-bottom: 2px solid #63adb750;
-  font-weight: 600;
   text-align: center;
 }
-
 .projects-table td {
   padding: 12px;
   color: #d8e2f1;
@@ -352,12 +334,268 @@ body[dir="ltr"] .features li::before {
   text-align: center;
   font-size: 15px;
 }
-
 .projects-table tr:hover {
-  background-color: #498898; /* عند المرور */
+  background-color: #498898;
   transition: background-color 0.3s ease;
 }
 
 
-/* ====================== صفحه الادخال====================== */
-/* ====================== نموذج الإدخال متعدد الخطوات ====================== */
+
+/* ======================= 📱 دعم الجوال — الصفحة كاملة ======================= */
+@media (max-width: 768px) {
+
+  body {
+    padding-top: 90px; /* مساحة للهيدر */
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* الهيدر */
+  .topbar {
+    height: 65px;
+    padding: 0 12px;
+  }
+
+  .logo img {
+    height: 55px;
+  }
+
+  .lang-icon,
+  .user-icon {
+    font-size: 22px;
+    padding: 8px;
+    left: 0;
+  }
+
+  /* ✅ القائمة المنسدلة تظهر بشكل واضح في الجوال */
+  .dropdown-content {
+    right: 0;
+    right: -90px; 
+    top: 45px;
+    min-width: 160px;
+  }
+
+
+
+
+  /* الحاوية الأساسية */
+  .container {
+    flex-direction: column;
+    width: 92%;
+    padding: 18px;
+    margin-top: 110px;
+    gap: 1.3rem;
+    border-radius: 14px;
+  }
+
+  /* القسم الأيسر */
+  .left-section {
+    width: 100%;
+    padding: 20px 18px;
+  }
+
+  .card {
+    width: 100%;
+    padding: 18px;
+    font-size: 0.95rem;
+  }
+
+  .card i {
+    font-size: 28px;
+  }
+
+  /* القسم الأيمن */
+  .right-section {
+    width: 100%;
+    padding: 45px 25px;
+  }
+
+  .right-section h1 {
+    font-size: 26px;
+  }
+
+  .right-section h2 {
+    font-size: 15px;
+  }
+
+  .right-section p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .features li {
+    font-size: 14px;
+    padding-right: 15px;
+  }
+
+  /* آخر المشاريع */
+  .recent-projects {
+    width: 95%;
+    padding: 16px;
+  }
+
+  .projects-table th,
+  .projects-table td {
+    padding: 8px 5px;
+    font-size: 13px;
+  }
+}
+
+/* ======================= 📱 شاشات أصغر (أقل من 480px) ======================= */
+@media (max-width: 480px) {
+
+  .topbar {
+    padding: 0 8px;
+  }
+
+  .logo img {
+    height: 48px;
+  }
+
+  .lang-icon,
+  .user-icon {
+    font-size: 18px;
+    padding: 5px;
+  }
+
+  .container {
+    padding: 15px;
+    margin-top: 115px;
+  }
+
+  .right-section h1 {
+    font-size: 22px;
+  }
+
+  .right-section p {
+    font-size: 13px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .card i {
+    font-size: 24px;
+  }
+
+  .projects-table th,
+  .projects-table td {
+    font-size: 12px;
+  }
+}
+
+/* ======================= 💎 باقات الاشتراك ======================= */
+.pricing-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 80px 0;
+  padding: 40px 20px;
+  background: rgba(32, 13, 51, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.pricing-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 40px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.pricing-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.pricing-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 30px 25px;
+  width: 280px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.pricing-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+}
+
+.pricing-card h4 {
+  color: #bcd4f6;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.pricing-card .price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 18px;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.pricing-card ul li {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 14px;
+  color: #e6efff;
+}
+
+.subscribe-btn {
+  background: linear-gradient(90deg, #498898, #63adb7);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+}
+
+.subscribe-btn:hover {
+  background: linear-gradient(90deg, #63adb7, #80c0ca);
+  transform: scale(1.05);
+}
+
+/* الألوان الخاصة لكل باقة */
+.pricing-card.basic {
+  border-top: 4px solid #63adb7;
+}
+.pricing-card.pro {
+  border-top: 4px solid #9850f5;
+}
+.pricing-card.gov {
+  border-top: 4px solid #00b894;
+}
+
+/* ======================= 📱 تجاوب الباقات ======================= */
+@media (max-width: 768px) {
+  .pricing-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pricing-card {
+    width: 85%;
+  }
+}
+
+

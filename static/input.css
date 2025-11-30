@@ -1,4 +1,4 @@
-/* ======================= النمط العام للموقع الرسمي ======================= */
+/* ======================= 🌌 الإعداد العام ======================= */
 body {
   font-family: "Tajawal", "Segoe UI", sans-serif;
   margin: 0;
@@ -9,11 +9,15 @@ body {
   background-attachment: fixed;
   color: white;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 70px;
+  position: relative;
   overflow-x: hidden;
 }
 
-/* ✅ الطبقة الشفافة (خلفية مظللة بدون تغطية المحتوى) */
+/* 🌫️ طبقة ضبابية فوق الخلفية */
 body::before {
   content: "";
   position: fixed;
@@ -23,59 +27,57 @@ body::before {
   height: 100%;
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(6px);
-  z-index: -1; /* ✅ يجعلها خلف المحتوى بالكامل */
+  z-index: -1;
 }
 
-/* ضمان بقاء المحتوى فوق الخلفية */
-main, header, section, .container, .form-container {
+/* نخلي المحتوى فوق الخلفية */
+main, header, section, .container {
   position: relative;
   z-index: 1;
 }
-
-
-/* ======================= الهيدر ======================= */
+/* ===== الهيدر ===== */
+/* ======================= الهيدر المنسق ======================= */
+/* ======================= ✅ محاذاة دقيقة للهيدر ======================= */
 .topbar {
+  width: 100%;
+  height: 70px;
+  padding: 0 20px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background-color: #547f8534;
-  padding: 12px 30px;
-  color: #ffffff;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-.logo {
-  font-size: 19px;
-  font-weight: bold;
-  color: #ffffff;
-  /* text-shadow: 
-    0 0 10px rgba(0, 255, 255, 0.7), 
-    0 0 20px rgba(0, 255, 255, 0.5), 
-    0 0 40px rgba(0, 255, 255, 0.3); */
-  transition: all 0.3s ease;
+  background: rgba(0, 13, 16, 0.381);
+  backdrop-filter: blur(6px);
 }
 
-/* لما تمرين الماوس عليه يصير اللمع أقوى */
-.logo:hover {
-  text-shadow: 
-    0 0 15px rgb(153, 164, 164), 
-    0 0 3px rgba(152, 165, 165, 0.9), 
-    0 0 50px rgba(144, 158, 158, 0.8);
-  transform: scale(1.05);
+/* اللوقو */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0.5; /* ← بدل 1 تاخذ نص مساحة فقط */
 }
 
+/* حرّك اللوقو شوي يسار */
+.logo img {
+  height: 80px;
+  margin-left: 20px;
+  margin-right:30px; /* ← هذا اللي يحركه يسار */
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+}
 
+/* وسط الهيدر */
 .topbar-center {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 35px;
-  flex-grow: 1;
+  flex: 2; /* ← ياخذ المساحة الأكبر ويثبت في النص */
   text-align: center;
 }
 
@@ -92,16 +94,6 @@ main, header, section, .container, .form-container {
   color: #ffffff;
   border-bottom: 2px solid #ffffff;
 }
-
-.topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-direction: row-reverse;
-  margin-left: 50px;
-  margin-right: 50px;
-}
-
 
 /* ===================== الحاوية الرئيسية ===================== */
 .form-container {
@@ -320,50 +312,70 @@ button:hover {
 }
 
 
-/* ======================= قسم توليد الجداول ======================= */
-.table-generator {
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 25px;
-  margin-top: 30px;
-  margin-bottom: 35px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: 0.3s;
-}
-
-.table-generator:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.table-generator h3 {
-  color: #0f3d61;
-  border-right: 5px solid #0f3d61;
-  padding-right: 10px;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
-
-.table-generator textarea {
+.generated-table-container table {
   width: 100%;
-  border: 1px solid #ccc;
-  background: #f9f9ff;
-  color: #222;
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-top: 8px;
-  font-family: "Tajawal", sans-serif;
-  font-size: 15px;
-  line-height: 1.8;
-  resize: vertical;
-  transition: border-color 0.3s ease;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
-.table-generator textarea:focus {
-  outline: none;
-  border-color: #004c97;
-  box-shadow: 0 0 8px rgba(0, 76, 151, 0.3);
+/* رأس الجدول */
+.generated-table-container th {
+  background: linear-gradient(90deg, #0f3d61, #164b7c) !important;
+  color: #fff !important;
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
 }
+
+/* الخلايا */
+.generated-table-container td {
+  border: 1px solid #d0d7de !important;
+  padding: 10px;
+  background: #f9fbfd !important;
+  text-align: center;
+  font-size: 15px;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+/* التأثير عند المرور */
+.generated-table-container tr:hover td {
+  background-color: #eaf3fc !important;
+}
+
+/* الخلايا القابلة للتحرير */
+.generated-table-container td input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background: #f3f6fa;
+  border-radius: 5px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+.generated-table-container td input:focus {
+  outline: 2px solid #0f3d61;
+  background-color: #f3f9ff;
+}
+
+/* حركة الدخول */
+.generated-table-container table {
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 /* 🧾 تنسيق الجدول الناتج */
 #generatedTableContainer table {
@@ -592,4 +604,216 @@ input::placeholder {
 
 @keyframes blink {
   50% { opacity: 0.3; }
+}
+
+.header-input {
+  width: 100%;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px;
+  font-family: "Tajawal", sans-serif;
+  font-size: 14px;
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.header-input:focus {
+  outline: none;
+  border-color: #0f3d61;
+  box-shadow: 0 0 5px rgba(15, 61, 97, 0.3);
+}
+
+
+/* ======================= 📱 تصميم الجوال والتابلت ======================= */
+@media (max-width: 768px) {
+
+  /* الهيدر */
+  .topbar {
+    height: 60px;
+    padding: 0 12px;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  .topbar-center {
+    gap: 18px;
+  }
+
+  .topbar-center a {
+    font-size: 13px;
+  }
+
+  /* الحاوية الرئيسية */
+  .form-container {
+    width: 92%;
+    padding: 35px 25px;
+    margin: 110px auto 40px auto;
+  }
+
+  /* العناوين */
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 17px;
+    border-right-width: 3px;
+  }
+
+  /* الحقول */
+  input,
+  textarea,
+  select {
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  /* الجداول */
+  .generated-table-container th,
+  .generated-table-container td {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .generated-table-container input {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+ 
+
+  /* أزرار التنقل */
+  .form-navigation {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .generate-btn {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  /* صندوق المراجعة */
+  .review-box {
+    padding: 18px;
+    font-size: 14px;
+  }
+
+  .review-header {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  /* رسائل الخطأ */
+  #errorMsg {
+    font-size: 14px;
+    width: 95%;
+  }
+
+  /* الجداول الناتجة */
+  #generatedTableContainer th,
+  #generatedTableContainer td {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  /* حقول رأس الجدول */
+  .header-input {
+    font-size: 13px;
+    padding: 6px;
+  }
+}
+
+/* ======================= 📱 جوالات صغيرة جدًا (آيفون SE) ======================= */
+@media (max-width: 480px) {
+
+  .topbar {
+    height: 55px;
+  }
+
+  .logo img {
+    height: 42px;
+  }
+
+  .form-container {
+    padding: 25px 18px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 15px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 13px;
+    padding: 9px;
+  }
+
+  button {
+    font-size: 13px;
+  }
+
+  .checkbox-group label {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  /* الجداول */
+  .generated-table-container th,
+  .generated-table-container td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .generated-table-container input {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .review-box {
+    font-size: 13px;
+  }
+
+  #errorMsg {
+    font-size: 13px;
+  }
+}
+/* ====================== 📱 موبايل ====================== */
+@media (max-width: 550px) {
+  .checkbox-group {
+    display: flex;
+    justify-content: flex-start !important;
+    gap: 12px;           /* مسافة بين النص والصندوق */
+    padding: 14px;
+  }
+
+  .checkbox-grouplabel {
+    flex: 1;             /* يعطي مساحة للنص وما ينزل تحت */
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .checkbox-group input[type="checkbox"] {
+    transform: scale(1.3);
+    margin-left: 8px;
+  }
 }

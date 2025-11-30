@@ -73,10 +73,16 @@ FIELD_MAP = {
     "Equipment_Specifications_Table":"llm",
     "Workers_Table":"llm",
     "Service_Execution_Method":"llm",
+    "Alternative_Offers":"llm",
+    "Offer_Formatting_Requirements":"llm",
+
+
+    # "Alternative_Offers":"llm",
+    # "Offer_Formatting_Requirements":"llm",
 
 
 
     # 📄 Static Defaults (seldom change)
-    "Joint_Venture": "default",
+    "Joint_Venture": "llm",
     # "Approved_Currency": "default",
 }

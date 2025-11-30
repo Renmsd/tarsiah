@@ -14,7 +14,10 @@
   <!-- =================== الهيدر =================== -->
   <header class="topbar">
     <div class="topbar-right">
-      <div class="logo">Smart RFP AI</div>
+        <a href="/" class="logo">
+          <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="Tarsiah Logo" />
+        </a>
+      
     </div>
     <nav class="topbar-center">
       <a href="/" class="active" id="nav-home"></a>
@@ -23,7 +26,7 @@
     </nav>
 
     <div class="topbar-left">
-      <i class='bx bx-globe lang-icon' onclick="toggleLang()" title="تبديل اللغة"></i>
+      
 
       <div class="user-menu">
         <i class='bx bx-user user-icon' onclick="toggleUserMenu()" title="الحساب"></i>
@@ -60,9 +63,7 @@
       <div class="right-section">
         <h1 id="main-title">Smart RFP AI</h1>
         <h2 id="main-subtitle">حلول ذكية لإدارة  RFP والعروض بدقة وكفاءة</h2>
-        <p id="main-desc">
-          منصة متكاملة تساعدك على إنشاء، تحليل، ومقارنة RFP باستخدام تقنيات الذكاء الاصطناعي الحديثة.
-        </p>
+        <p id="main-desc"> منصة متكاملة تساعدك على إنشاء، تحليل، ومقارنة العروض باستخدام تقنيات الذكاء الاصطناعي الحديثة.</p>
 
         <ul class="features">
           <li id="feat1">سهولة الاستخدام</li>
@@ -87,6 +88,50 @@
             <!-- البيانات تتغير تلقائياً من JS -->
           </tbody>
         </table>
+      </div>
+    </section>
+
+            <!-- ✅ قسم باقات الاشتراك -->
+    <section class="pricing-section">
+      <h3 class="pricing-title">باقات الاشتراك</h3>
+      <div class="pricing-container">
+
+        <!-- الباقة الأساسية -->
+        <div class="pricing-card basic">
+          <h4>الباقة الأساسية</h4>
+          <p class="price">49 ريال / شهر</p>
+          <ul>
+            <li>3 منافسات شهريًا</li>
+            <li>تقييم فني بسيط</li>
+            <li>دعم عبر البريد فقط</li>
+          </ul>
+          <button class="subscribe-btn">اشترك الآن</button>
+        </div>
+
+        <!-- الباقة الاحترافية -->
+        <div class="pricing-card pro">
+          <h4>الباقة الاحترافية</h4>
+          <p class="price">199 ريال / شهر</p>
+          <ul>
+            <li>عدد غير محدود من المنافسات</li>
+            <li>تحليل متقدم وتقييم ذكي</li>
+            <li>تقارير تفصيلية ولوحة تحكم</li>
+            <li>دعم فني مباشر</li>
+          </ul>
+          <button class="subscribe-btn highlight">اشترك الآن</button>
+        </div>
+
+        <!-- باقة الجهات الحكومية -->
+        <div class="pricing-card gov">
+          <h4>الباقة الحكومية</h4>
+          <p class="price">بالاتفاق</p>
+          <ul>
+            <li>ربط مباشر مع منصة اعتماد</li>
+            <li>استضافة سحابية خاصة</li>
+            <li>دعم مخصص ومدير حساب</li>
+          </ul>
+          <button class="subscribe-btn">تواصل معنا</button>
+        </div>
       </div>
     </section>
   </main>

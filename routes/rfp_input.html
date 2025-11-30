@@ -1,213 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إنشاء RFP | Smart RFP AI</title>
-
-  <!-- 🔹 التنسيقات -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='input.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-</head>
-
-<body lang="ar" dir="rtl">
-  <!-- 🔹 الهيدر -->
-  <header class="topbar">
-    <div class="topbar-right">
-      <a href="/" class="logo">Smart RFP AI</a>
-    </div>
-
-    <nav class="topbar-center">
-      <a href="/" id="nav-home">الرئيسية</a>
-      <a href="/rfp_input" class="active" id="nav-generate">إنشاء RFP</a>
-      <a href="/comparison" id="nav-compare">مقارنة العروض</a>
-    </nav>
-  </header>
-
-  <!-- 🔹 المحتوى -->
-  <div class="form-container">
-    <form id="rfpForm" action="/rfp_generate" method="post" novalidate>
-
-
-      <!-- ✅ الخطوة 1: المقدمة -->
-      <div class="form-step active">
-        <h2>البيانات الأساسية للمنافسة</h2>
-        <h3>المقدمة </h3>
-
-        <label>اسم المنافسة</label>
-        <input type="text" name="Competition_Name" placeholder="مثلاً: مشروع إنشاء مبنى إداري" required>
-
-        <label>رقم الكراسة</label>
-        <input type="text" name="Booklet_Number" placeholder="مثلاً: RFP-2025-001" >
-
-        <label>تاريخ طرح الكراسة</label>
-        <input type="date" name="Announcement_Date" >
-
-        <label>الجهة الحكومية</label>
-        <input type="text" name="Government_Agency" placeholder="وزارة البيئة والمياه والزراعة" required>
-
-        <label>تكاليف وثائق المنافسة (ريال)</label>
-        <input type="number" name="Competition_Document_Fees" placeholder="أدخل المبلغ بالريال" >
-
-        <h3>آلية الدفع</h3>
-        <div class="checkbox-group">
-          <label><input type="checkbox" name="Payment_Method" value="شيك"> شيك مصدق</label>
-          <label><input type="checkbox" name="Payment_Method" value="حوالة"> حوالة بنكية</label>
-          <label><input type="checkbox" name="Payment_Method" value="نظام سداد"> نظام سداد</label>
-        </div>
-
-        <h3>ممثل الجهة الحكومية</h3>
-        <label>الاسم</label>
-        <input type="text" name="Name_of_Government_Agency_Representative" placeholder="أدخل اسم الممثل" >
-
-        <label>الوظيفة</label>
-        <input type="text" name="Position_of_Government_Agency_Representative" placeholder="مثلاً: مدير المشتريات" >
-
-        <label>الهاتف</label>
-        <input type="text" name="Phone_Number_of_Government_Agency_Representative" placeholder="05xxxxxxxx">
-
-        <label>الفاكس</label>
-        <input type="text" name="Fax_Number_of_Government_Agency_Representative" placeholder="011xxxxxxx">
-
-        <label>البريد الإلكتروني</label>
-        <input type="email" name="Email_of_Government_Agency_Representative" placeholder="example@domain.sa">
-
-        <h3>عنوان مكان التسليم</h3>
-        <label>العنوان</label>
-        <input type="text" name="Bid_Submission_Address" placeholder="المدينة، الحي، الشارع">
-
-        <label>المبنى</label>
-        <input type="text" name="Bid_Submission_Building" placeholder="مثلاً: مبنى رقم 12">
-
-        <label>الطابق</label>
-        <input type="text" name="Bid_Submission_Floor" placeholder="مثلاً: الثالث">
-
-        <label>الغرفة / الإدارة</label>
-        <input type="text" name="Bid_Submission_Department_Name" placeholder="إدارة المشتريات">
-
-        <label>وقت التسليم</label>
-        <input type="text" name="Bid_Submission_Time" placeholder="من الساعة 8 صباحاً إلى 12 ظهراً">
-      </div>
-
-      <!-- ✅ الخطوة 2: إعداد العروض -->
-      <div class="form-step">
-        <h2>متطلبات تقديم العروض</h2>
-
-        <label> ارفاق ملحق معايير التأهيل </label>
-        <input type="number" name="Post_Qualification" placeholder="مثلاً: 5" >
-
-        <label>فترة ارسال الاسئلة والاستفسارات</label>
-        <input type="number" name="Inquiry_Submission_period" placeholder="خلال 5 ايام" >
-
-        <label>فترة الاجابة على الاسئلة والاستفسارات</label>
-        <input type="number" name="Inquiry_Response_Period" placeholder="خلال 10 ايام" >
-
-        <label>البريد الإلكتروني للرد على الأسئلة والاستفسارات</label>
-        <input type="email" name="Inquiry_Email" placeholder="example@domain.sa" >
-
-        <label>نسبة الضمان الابتدائي (%)</label>
-        <input type="number" name="Initial_Guarantee_Percentage" placeholder="مثلاً: 5 %" >
-
-        <h3>خيارات إضافية</h3>
-
-        <label><input type="checkbox" name="include_Joint_Venture" checked> التضامن (افتراضي)</label><br>
-        <label><input type="checkbox" name="include_Tender_Split_Section"> تجزئة المنافسة</label><br>
-        <label><input type="checkbox" name="include_Alternative_Offers"> العروض البديلة</label><br>
-
-        <h3>طبيعة المشروع</h3>
-<select name="Project_Type">
-  <option value="تشغيل وصيانة">تشغيل وصيانة</option>
-  <option value="استشارات">استشارات</option>
-  <option value="مشروع هندسي / إنشائي">مشروع هندسي / إنشائي</option>
-  <option value="تطوير أنظمة / مشروع تقني">تطوير أنظمة / مشروع تقني</option>
-</select>
-
-<h3>مدة المشروع (بالأشهر)</h3>
-<input type="number" name="Project_Duration" placeholder="مثلاً: 12">
-
-<h3>أسلوب الترسية</h3>
-<select name="Award_Method">
-  <option value="Best Technical Offer">الأفضل من الناحية الفنية</option>
-  <option value="Best Value">القيمة الأفضل</option>
-  <option value="Lowest Price">أقل سعر</option>
-</select>
-
-<h3>هل يشمل المشروع توريد أجهزة أو معدات؟</h3>
-<select name="Includes_Equipment">
-  <option value="no">لا</option>
-  <option value="yes">نعم</option>
-</select>
-
-<label>متطلبات المحتوى المحلي (اختياري)</label>
-<input type="text" name="Local_Content_Requirements" placeholder="مثلاً: الالتزام بنسبة 30% محتوى محلي">
-
-
-
-      </div>
-
-      <!-- ✅ الخطوة 3: متطلبات التعاقد -->
-      <div class="form-step">
-        <h2> شروط وأحكام التعاقد</h2>
-        <label>نسبة إجمالي الغرامه من القيمه الإجمالية للعقد (%)</label>
-        <input type="number" name="Max_Penalty_Percentage" rows="3" placeholder="مثلاً: 20 %">
-        <label>مكان عمل المشروع</label>
-        <input type="text" name="Service_Execution_Location" placeholder="مثلاً: مدينة الرياض">
-      </div>
-
-
-      
-      <!-- ================= القسم الخامس: جدول الكميات والأسعار ================= -->
-      <div class="form-step">
-        <section class="table-generator">
-          <h3>جدول الكميات والأسعار</h3>
-          <textarea id="tableInput" rows="5" placeholder="أدخل المواد والكميات (مثال: حديد 10 طن بسعر 500 ريال)"></textarea>
-          <button id="generateTableBtn" class="btn-generate">توليد الجدول</button>
-          <p id="loadingMsg" style="display:none; color:gray;"> جاري توليد الجدول...</p>
-          <div id="generatedTableContainer" style="margin-top:20px;"></div>
-          <button id="saveTableBtn" class="btn-save" style="display:none;"> حفظ الجدول</button>
-        </section>
-      </div>
-
-      <!-- ✅ الخطوة 6: المراجعة -->
-      <div class="form-step">
-        <h2>مراجعة وأنشاء RFP</h2>
-        <div class="review-header">
-          <p>يرجى مراجعة جميع البيانات قبل إنشاء الوثيقة.</p>
-        </div>
-        <div class="review-box" id="review-box"></div>
-        <div class="generate-section">
-          <p id="errorMsg">⚠️ يرجى إدخال اسم الجهة الحكومية واسم المنافسة</p>
-          <button type="submit" id="generateBtn" class="generate-btn">إنشاء وثيقة RFP</button>
-          <p id="loadingText" class="loading-msg">جارٍ إنشاء الوثيقة <span id="dots"></span></p>
-        </div>
-      </div>
-
-
-      <!-- 🔹 أزرار التنقل (خارج جميع الخطوات) -->
-      <div class="form-navigation">
-        <button type="button" id="prevBtn">السابق</button>
-        <button type="button" id="nextBtn">التالي</button>
-      </div>
-
-    </form>
-  </div>
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const e = document.getElementById("errorMsg");
-    if (e) {
-      console.log("✅ تم العثور على errorMsg");
-    } else {
-      console.log("❌ لم يتم العثور على errorMsg");
-    }
-  });
-</script>
-
-
-  <!-- 🔹 السكربت -->
-  <script src="{{ url_for('static', filename='table_generator.js') }}"></script>
-
-  <script src="{{ url_for('static', filename='input.js') }}"></script>
-
-</body>
-</html>

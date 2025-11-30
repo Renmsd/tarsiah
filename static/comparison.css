@@ -1,0 +1,535 @@
+/* ===== الخلفية العامة ===== */
+body {
+  font-family: "Tajawal", "Segoe UI", sans-serif;
+  margin: 0;
+  background-image: url("/static/images/2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 70px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 🔹 ضبابية خفيفة للخلفية */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+}
+
+main, header, section, .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== الهيدر ===== */
+.topbar {
+  width: 100%;
+  height: 70px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: rgba(0, 13, 16, 0.381);
+  backdrop-filter: blur(6px);
+}
+
+/* اللوقو */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0.5; /* ← بدل 1 تاخذ نص مساحة فقط */
+}
+
+/* حرّك اللوقو شوي يسار */
+.logo img {
+  height: 80px;
+  margin-left: 20px;
+  margin-right:30px; /* ← هذا اللي يحركه يسار */
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+}
+
+/* وسط الهيدر */
+.topbar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  flex: 2; /* ← ياخذ المساحة الأكبر ويثبت في النص */
+  text-align: center;
+}
+
+.topbar-center a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.topbar-center a:hover,
+.topbar-center .active {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+
+
+/* ===== الحاوية ===== */
+.page-container {
+  display: flex;
+  flex-direction: row-reverse; /* ✅ عكس الاتجاه: يسار رفع الملفات */
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1200px;
+  margin: 100px auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== يسار: رفع الملفات ===== */
+.left-panel {
+  flex: 0.4;
+  background-color: #1c0b2b87; /* موف غامق */
+  color: white;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: none; /* بدون ضباب */
+}
+
+.left-panel h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f8fafc;
+  color: #222;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+
+button {
+  background-color: #ffffff;   /* خلفية بيضاء */
+  color: #200d33e6;              /* لون الخط موف غامق */
+  border: none;
+  padding: 10px 25px;          /* ارتفاع وعرض الزر الداخلي */
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  width: auto;                 /* ✅ يخليه بحجم النص فقط */
+  transition: 0.3s ease;
+  align-self: flex-start;      /* ✅ يخليه على الجهة اليسرى */
+  margin-top: 10px;
+  
+}
+
+button:hover {
+  background-color: #3d1962d0;   /* تأثير عند المرور */
+  color: #f4f2f5;
+}
+
+.left-panel h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+
+/* ===== يمين: النتائج ===== */
+.right-panel {
+  flex: 0.6;
+  background-color: #fefeff;
+  padding: 60px 50px;
+  overflow-y: auto;
+  position: relative;
+  transition: 0.6s ease;
+}
+/* 🎯 تمركز القسم مع محاذاة النص لليمين */
+#intro-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* يوسّط عموديًا */
+  align-items: center;       /* يوسّط العنصر ككل داخل القسم */
+  height: 90%;
+  animation: fadeIn 0.8s ease;
+}
+
+/* العنوان والفقرات */
+#intro-box h1 {
+  color: #0f3d61;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-align: right;         /* النص لليمين */
+  width: 100%;
+  max-width: 600px;          /* علشان يكون محدد العرض */
+}
+
+#intro-box p {
+  color: #2f4050;
+  font-size: 16px;
+  line-height: 1.9;
+  text-align: right;         /* النص لليمين */
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 8px;
+}
+#intro-box h2 {
+  color: #376166de;
+  font-size: 16px;
+  line-height: 1.9;
+  text-align: right;         /* النص لليمين */
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 8px;
+}
+
+/* حركة الظهور */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+#results-section {
+  animation: fadeIn 0.8s ease;
+}
+
+#results-section h2 {
+  text-align: center;
+  color: #0f3d61;
+  margin-bottom: 30px;
+}
+
+.proposal-card {
+  background-color: #f9f9ff;
+  border: 1px solid #d7dce2;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.proposal-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.proposal-card h3 {
+  color: #0f3d61;
+  margin-bottom: 15px;
+  text-align: right;
+}
+
+/* ===== جدول الدرجات ===== */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  background-color: #fff;
+  color: #222;
+  font-size: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.summary-table th {
+  background-color: #0f3d61;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.summary-table td {
+  border: 1px solid #d6d6d6;
+  padding: 8px;
+  text-align: center;
+}
+
+/* ===== التعليق العام ===== */
+.overall-comment {
+  color: #444;
+  margin-top: 15px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.proposal-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin: 25px auto;
+  max-width: 750px;
+  position: relative;
+  animation: fadeIn 0.5s ease;
+}
+.proposal-card:hover { transform: translateY(-4px); transition: 0.3s; }
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #fefefe;
+}
+.summary-table th {
+  background: #0f3d61;
+  color: white;
+  padding: 8px;
+  text-align: center;
+}
+.summary-table td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  text-align: center;
+}
+.overall-comment {
+  margin-top: 15px;
+  background: #f7f9fb;
+  border-radius: 10px;
+  padding: 12px;
+  color: #333;
+  line-height: 1.7;
+  border: 1px solid #e0e0e0;
+}
+.status-badge {
+    position: absolute;
+    top: 0px;       
+    right: 20px;
+
+    background: #d9534f;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.15);
+}
+
+.rationale-card {
+  border: 2px dashed #007bff;
+  background: #f8faff;
+}
+.rationale-text {
+  line-height: 1.8;
+  color: #222;
+  font-size: 15px;
+}
+  /* زر السهم داخل دائرة */
+/* الدائرة الحقيقية للسهم */
+.toggle-btn {
+    position: absolute;
+    bottom: -16px;     /* على الحافة 100% */
+    left: 50%;
+    transform: translateX(-50%);
+    
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #d0d0d0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    opacity: 0;
+    transition: 0.25s ease;
+}
+
+/* يظهر عند الهوفر */
+.proposal-card:hover .toggle-btn {
+    opacity: 1;
+}
+
+/* شكل السهم (خطين مائلين — نسخة مطابقة لصورتك) */
+.toggle-btn::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+
+    border-right: 2px solid #333;
+    border-bottom: 2px solid #333;
+
+    transform: rotate(45deg);
+    transition: 0.25s ease;
+}
+
+/* دوران السهم عند الفتح */
+.toggle-btn.open::after {
+    transform: rotate(-135deg);
+}
+
+/* صندوق التعليق */
+.comment-box {
+    margin-top: 20px;
+    background: #f7f9fb;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* ===== الحركة ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================
+   📱 تصميم خاص للجوال
+   ============================ */
+@media (max-width: 768px) {
+
+  /* الهيدر */
+  .topbar {
+    height: 60px;
+    padding: 0 15px;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  .topbar-center {
+    gap: 15px;
+  }
+
+  .topbar-center a {
+    font-size: 13px;
+  }
+
+  /* الصفحة */
+  .page-container {
+    flex-direction: column; /* يسار فوق – يمين تحت */
+    height: auto;
+    width: 95%;
+    margin-top: 90px;
+    box-shadow: none;
+    border-radius: 10px;
+  }
+
+  /* يسار رفع الملفات */
+  .left-panel {
+    flex: none;
+    width: 100%;
+    padding: 25px 20px;
+  }
+
+  /* يمين النتائج */
+  .right-panel {
+    flex: none;
+    width: 100%;
+    padding: 20px 15px;
+  }
+
+  #intro-box h1 {
+    font-size: 26px;
+    text-align: center;
+    max-width: 95%;
+  }
+
+  #intro-box p,
+  #intro-box h2 {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* الكارد */
+  .proposal-card {
+    padding: 16px;
+    margin: 15px auto;
+    width: 100%;
+  }
+
+  .proposal-card h3 {
+    font-size: 17px;
+  }
+
+  .summary-table td,
+  .summary-table th {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  /* شارة المؤهل */
+  .status-badge {
+    right: 10px;
+    top: -6px;
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  /* السهم داخل الدائرة */
+  .toggle-btn {
+    width: 26px;
+    height: 26px;
+    bottom: -13px; /* ينسجم مع حجم الدائرة الجديد */
+  }
+
+  .toggle-btn::after {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #333;
+    border-bottom: 2px solid #333;
+  }
+
+  /* صندوق التعليق */
+  .comment-box {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

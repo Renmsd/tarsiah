@@ -25,7 +25,7 @@ const translations = {
     logout: "تسجيل الخروج",
     title: "Smart RFP AI",
     subtitle: "حلول ذكية لإدارة RFP والعروض بدقة وكفاءة",
-    desc: "منصة متكاملة تساعدك على إنشاء، تحليل، ومقارنة RFP باستخدام تقنيات الذكاء الاصطناعي الحديثة.",
+    desc: "منصة متكاملة تساعدك على إنشاء، تحليل، ومقارنة العروض باستخدام تقنيات الذكاء الاصطناعي الحديثة.",
     features: ["سهولة الاستخدام", "ذكاء اصطناعي موثوق", "نتائج دقيقة"],
     card1Title: "إنشاء RFP",
     card1Text: "ابدأ بإنشاء RFP  بناءً على بيانات المشروع",
@@ -124,18 +124,27 @@ window.addEventListener("DOMContentLoaded", () => {
 // ==========================
 async function loadProjects(lang) {
   try {
-
     const response = await fetch("static/projects.json?ts=" + new Date().getTime());
     const data = await response.json();
-    const projects = data[lang].slice(-5);
 
+    // ✅ رتب حسب التاريخ من الأحدث إلى الأقدم
+    const projects = data[lang]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5);
 
     const tableBody = document.getElementById("table-body");
     tableBody.innerHTML = "";
 
     projects.forEach((proj) => {
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${proj.name}</td><td>${proj.date}</td>`;
+      row.innerHTML = `
+          <td>
+              <a href="/download?file=${proj.file}" style="color:#4db6ff; text-decoration:none;">
+                  ${proj.name}
+              </a>
+          </td>
+          <td>${proj.date}</td>
+      `;  
       tableBody.appendChild(row);
     });
   } catch (error) {

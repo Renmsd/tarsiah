@@ -12,7 +12,9 @@
   <!-- 🔹 الهيدر -->
   <header class="topbar">
     <div class="topbar-right">
-      <a href="/" class="logo">Smart RFP AI</a>
+      <a href="/" class="logo">
+          <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="Tarsiah Logo" />
+      </a>
     </div>
 
     <nav class="topbar-center">
@@ -81,6 +83,8 @@
 
           <label>تعريف المنافسة</label>
           <textarea name="Competition_Definition" rows="4">{{ decisions.get('Competition_Definition', {}).get('value', '') }}</textarea>
+          <label>السعر نصا</label>
+          <textarea name="Text_of_Costs_of_Competition_Documents" rows="4">{{ decisions.get('Text_of_Costs_of_Competition_Documents', {}).get('value', '') }}</textarea>
 
           <label>نطاق العمل</label>
           <textarea name="Project_Scope_of_Work" rows="4">{{ decisions.get('Project_Scope_of_Work', {}).get('value', '') }}</textarea>
@@ -114,7 +118,10 @@
 
           <label>تجزئة المنافسة</label>
           <textarea name="Tender_Split_Section" rows="4">{{ decisions.get('Tender_Split_Section', {}).get('value', '') }}</textarea>
-
+          <label>العروض البديلة </label>
+          <textarea name="Alternative_Offers" rows="4">{{ decisions.get('Alternative_Offers', {}).get('value', '') }}</textarea>
+          <label> متطلبات تنسيق العروض</label>
+          <textarea name="Offer_Formatting_Requirements" rows="4">{{ decisions.get('Offer_Formatting_Requirements', {}).get('value', '') }}</textarea>
           <div class="buttons">
             <button type="button" class="prevBtn btn-secondary">السابق</button>
             <button type="button" class="nextBtn">التالي</button>

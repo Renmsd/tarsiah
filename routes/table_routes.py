@@ -76,6 +76,16 @@ def generate_equipment():
     session["Equipment_Specifications_Table"] = plain_text
     return jsonify({"html": html})
 
+@table_bp.route("/generate_table/workers", methods=["POST"])
+def generate_workers():
+    data = request.get_json()
+    text = data.get("text", "").strip() if data else ""
+    if not text:
+        return jsonify({"error": "النص فارغ."})
+    html, plain_text = generate_table_from_text(text)
+    session["Workers_Table"] = plain_text   # ✅ تخزين الجداول في session
+    return jsonify({"html": html})
+
 
 @table_bp.route("/save_table", methods=["POST"])
 def save_table():

@@ -12,6 +12,9 @@ from docx.shared import Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from typing import Optional
+from workflow.rfp_workflow import build_rfp_graph
+from evaluation_engine.evaluator import evaluate_proposal
+from routes.compare_routes import compare_bp
 
 # ============================================================
 # ⚙️ Flask configuration
@@ -21,6 +24,8 @@ app.secret_key = "smart-rfp-ai-key"
 
 from routes.table_routes import table_bp  # noqa: E402
 app.register_blueprint(table_bp)
+app.register_blueprint(compare_bp)
+
 
 
 def fix_rtl_bullets(text: str) -> str:
@@ -146,6 +151,7 @@ def save():
         # "Equipment_Specifications_Table",
         "Service_Execution_Method",
         "Alternative_Offers",
+        "Offer_Formatting_Requirements",
     }
 
     for key in list(safe_context.keys()):
@@ -260,29 +266,46 @@ def save():
     insert_table_if_exists(
         "Equipment_Specifications_Table",
         "{{Equipment_Specifications_Table}}",
-        heading_text="جدول مواصفات المعدات",
+        heading_text="واصفات المعدات",
     )
 
     insert_table_if_exists(
         "Workers_Table",
         "{{Workers_Table}}",
-        heading_text="جدول العمال"
+        heading_text="ثانياً: جدول مواصفات فريق العمل",
     )
 
 
     project_name = context.get("Competition_Name") or "مشروع بدون اسم"
     current_date = datetime.now().strftime("%Y-%m-%d")
+
     json_path = os.path.join("static", "projects.json")
+
+    # قراءة الملف أو إنشاؤه
     if os.path.exists(json_path):
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
     else:
         data = {"ar": [], "en": []}
-    data["ar"].insert(0, {"name": project_name, "date": current_date})
-    data["en"].insert(0, {"name": project_name, "date": current_date})
+
+    # حفظ بيانات المشروع + ملف الناتج
+    data["ar"].insert(0, {
+        "name": project_name,
+        "date": current_date,
+        "file": output_path   # ← مسار ملف الـ RFP
+    })
+
+    data["en"].insert(0, {
+        "name": project_name,
+        "date": current_date,
+        "file": output_path
+    })
+
+# كتابة الملف من جديد
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
 
     session["generated_file"] = output_path
     return render_template("result.html", project_name=project_name, download_url="/download")
@@ -294,6 +317,10 @@ def download_file():
     if not file_path or not os.path.exists(file_path):
         return "⚠️ الملف غير موجود. يرجى إعادة التوليد.", 404
     return send_file(file_path, as_attachment=True)
+
+@app.route("/comparison")
+def comparison_page():
+    return render_template("comparison.html")
 
 
 if __name__ == "__main__":

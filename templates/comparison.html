@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مقارنة العروض | Smart RFP AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='comparison.css') }}" />
+</head>
+
+<body>
+  <!-- 🔹 الهيدر -->
+  <header class="topbar">
+    <div class="topbar-right">
+      <a href="/" class="logo">
+          <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="Tarsiah Logo" />
+      </a>
+    </div>
+    <nav class="topbar-center">
+      <a href="/" id="nav-home">الرئيسية</a>
+      <a href="/rfp_input" id="nav-generate">إنشاء RFP</a>
+      <a href="/comparison" class="active" id="nav-compare">مقارنة العروض</a>
+    </nav>
+  </header>
+
+  <!-- 📄 محتوى الصفحة -->
+  <div class="page-container">
+    <!-- 🟣 يسار: رفع الملفات -->
+    <aside class="left-panel">
+      <form id="compareForm" method="POST" enctype="multipart/form-data" action="/compare_llm">
+        <label>كراسة الشروط (RFP):</label>
+        <input type="file" id="rfp_file" name="rfp_file" accept=".pdf,.txt" required />
+
+        <label>العروض (Proposals):</label>
+        <input type="file" id="proposal_files" name="proposal_files" multiple accept=".pdf,.txt" required />
+
+        <button type="submit"> حلّل الان</button>
+      </form>
+    </aside>
+
+    <!-- ⚪ يمين: النص التعريفي أو النتائج -->
+    <main class="right-panel">
+      <!-- ✨ النص التعريفي قبل رفع الملفات -->
+      <div id="intro-box" {% if results %}style="display:none;"{% endif %}>
+        <h1> حلّل عروضك بسهولة ودقة.</h1>
+        <p>قم برفع <strong>كراسة الشروط (RFP) والعروض (Proposals)، </strong>  وسيقدّم لك النظام مقارنة واضحة تدعم اتخاذ القرار.</p>
+        <h2>ابدأ الآن برفع الملفات</h2>
+      </div>
+
+      <!-- 📊 نتائج المقارنة -->
+      <div id="results-section" {% if results %}style="display:block;"{% else %}style="display:none;"{% endif %}>
+        <h2>نتائج مقارنة العروض</h2>
+
+        {% if results %}
+          {% for item in results %}
+          <div class="proposal-card">
+            <h3>{{ item.proposal_name }}</h3>
+
+            <table class="summary-table">
+              <tr>
+                <th>المعيار</th>
+                <th>الدرجة</th>
+              </tr>
+              {% for score_item in item.scores %}
+              <tr>
+                <td>{{ score_item.criterion }}</td>
+                <td>{{ score_item.score }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+
+            <p class="overall-comment"><strong>💬 التعليق العام:</strong> {{ item.overall_comment }}</p>
+
+            <div class="arrow-toggle" onclick="toggleDetails('details{{ loop.index }}', this)">⌄</div>
+
+            <div id="details{{ loop.index }}" class="details">
+              <p>{{ item.details }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="no-results">⚠️ لم يتم العثور على نتائج للمقارنة.</p>
+        {% endif %}
+      </div>
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='comparison.js') }}"></script>
+</body>
+</html>
+

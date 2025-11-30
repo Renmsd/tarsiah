@@ -38,47 +38,45 @@ main, header, section, .container {
 
 /* ======================= الهيدر الرسمي ======================= */
 .topbar {
+  width: 100%;
+  height: 70px;
+  padding: 0 20px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background-color: #547f8534;
-  padding: 12px 30px;
-  color: #ffffff;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-.logo {
-  font-size: 19px;
-  font-weight: bold;
-  color: #ffffff;
-  /* text-shadow: 
-    0 0 10px rgba(0, 255, 255, 0.7), 
-    0 0 20px rgba(0, 255, 255, 0.5), 
-    0 0 40px rgba(0, 255, 255, 0.3); */
-  transition: all 0.3s ease;
+  background: rgba(0, 13, 16, 0.381);
+  backdrop-filter: blur(6px);
 }
 
-/* لما تمرين الماوس عليه يصير اللمع أقوى */
-.logo:hover {
-  text-shadow: 
-    0 0 15px rgb(153, 164, 164), 
-    0 0 3px rgba(152, 165, 165, 0.9), 
-    0 0 50px rgba(144, 158, 158, 0.8);
-  transform: scale(1.05);
+/* اللوقو */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0.5; /* ← بدل 1 تاخذ نص مساحة فقط */
 }
 
+/* حرّك اللوقو شوي يسار */
+.logo img {
+  height: 80px;
+  margin-left: 20px;
+  margin-right:30px; /* ← هذا اللي يحركه يسار */
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+}
 
+/* وسط الهيدر */
 .topbar-center {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 35px;
-  flex-grow: 1;
+  flex: 2; /* ← ياخذ المساحة الأكبر ويثبت في النص */
   text-align: center;
 }
 
@@ -95,6 +93,7 @@ main, header, section, .container {
   color: #ffffff;
   border-bottom: 2px solid #ffffff;
 }
+
 
 
 /* ======================= الحاوية ======================= */
@@ -278,4 +277,165 @@ button:hover {
 
 .center {
   text-align: center;
+}
+
+/* ======================= 📱 تصميم الجوال والتابلت ======================= */
+@media (max-width: 768px) {
+
+  /* الهيدر */
+  .topbar {
+    height: 60px;
+    padding: 0 15px;
+  }
+
+  .logo img {
+    height: 48px;
+  }
+
+  .topbar-center {
+    gap: 18px;
+  }
+
+  .topbar-center a {
+    font-size: 13px;
+  }
+
+  /* الحاوية */
+  .container {
+    width: 95%;
+    padding: 30px 22px;
+    margin-top: 100px;
+  }
+
+  /* العناوين */
+  h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+  h3 {
+    font-size: 17px;
+    padding-right: 8px;
+    border-right-width: 4px;
+  }
+
+  /* الجداول */
+  .dates-table th,
+  .dates-table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .dates-table input {
+    padding: 7px;
+    font-size: 13px;
+  }
+
+  textarea {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  button {
+    width: 100%;        /* زر كامل عرض الجوال */
+    text-align: center;
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .generate-btn {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  /* ———————— بطاقات النتائج ———————— */
+  .proposal-card {
+    width: 100%;
+    padding: 16px;
+    margin: 18px auto;
+  }
+
+  .proposal-card h3 {
+    font-size: 16px;
+  }
+
+  .summary-table th,
+  .summary-table td {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  /* شارة المؤهل */
+  .status-badge {
+    top: -8px;
+    right: 10px;
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  /* زر السهم */
+  .toggle-btn {
+    width: 28px;
+    height: 28px;
+    bottom: -13px;
+  }
+
+  .toggle-btn::after {
+    width: 8px;
+    height: 8px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+  }
+
+  .comment-box {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  /* الهوامش العامة */
+  input[type="file"] {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+}
+
+/* ======================= 📱 تصميم جوالات صغيرة جدًا (آيفون SE) ======================= */
+@media (max-width: 480px) {
+
+  .container {
+    padding: 25px 18px;
+  }
+
+  h1 { font-size: 20px; }
+  h2 { font-size: 18px; }
+  h3 { font-size: 16px; }
+
+  .dates-table th,
+  .dates-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  textarea {
+    font-size: 13px;
+  }
+
+  button {
+    font-size: 13px;
+  }
+
+  .proposal-card {
+    padding: 14px;
+  }
+
+  .status-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .toggle-btn {
+    width: 26px;
+    height: 26px;
+  }
 }

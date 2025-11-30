@@ -1,6 +1,6 @@
 #graph1.py
 from nodes.orchestrator_graph import build_orchestrator_graph
-from nodes.render_node import render_node
+# from nodes.render_node import render_node
 from langgraph.graph import StateGraph,START, END
 from typing import TypedDict
 from langchain_openai import ChatOpenAI
@@ -32,17 +32,20 @@ def build_main_app():
     # ✅ return the WHOLE dict from orchestrator_graph, not just decisions
     def generate_node(state):
         state.setdefault("decisions", {})
+        state.setdefault("sections", [])
         result = orchestrator_graph.invoke(state)
         # merge back into state so render_node receives {"decisions": {...}, ...}
         state.update(result or {})
         return state
 
     g.add_node("generate", generate_node)
-    g.add_node("render", render_node)
+    # g.add_node("render", render_node)
 
     g.add_edge(START, "generate")
-    g.add_edge("generate", "render")
-    g.add_edge("render", END)
+    # g.add_edge("generate", "render")
+    # g.add_edge("render", END)
+    g.add_edge("generate", END)
+
     return g.compile()
 
 app = build_main_app()
