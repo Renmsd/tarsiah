@@ -16,6 +16,11 @@ from workflow.rfp_workflow import build_rfp_graph
 from evaluation_engine.evaluator import evaluate_proposal
 from routes.compare_routes import compare_bp
 
+import requests
+
+RFP_GENERATOR_URL = "https://rfp-generator-production.up.railway.app/generate_rfp"  # عدّليها برابطك
+
+
 # ============================================================
 # ⚙️ Flask configuration
 # ============================================================
@@ -67,36 +72,51 @@ def rfp_input() -> str:
 
 @app.route('/rfp_generate', methods=['POST'])
 def generate():
+    # 1) جمع بيانات المستخدم من الـ form
     user_data = request.form.to_dict(flat=False)
-    # تحويل القوائم إلى نصوص مفصولة بفواصل
+
+    # تحويل القوائم إلى نصوص (مثل multiple checkboxes)
     for key, value in user_data.items():
         if isinstance(value, list):
             user_data[key] = "، ".join(value)
 
+    # 2) تحديد الأقسام التي يريد المستخدم تضمينها
     include_sections = {
         "Joint_Venture": request.form.get("include_Joint_Venture") is not None,
         "Tender_Split_Section": request.form.get("include_Tender_Split_Section") is not None,
         "Alternative_Offers": request.form.get("include_Alternative_Offers") is not None,
         "Insurance": request.form.get("include_Insurance") is not None,
     }
-    session["include_sections"] = include_sections
 
-    result = run_graph(user_data)
-    decisions = result.get("decisions", {})
-    if not decisions:
+    session["include_sections"] = include_sections  # Optional — لو تحتاجينها لاحقاً
+
+    # 3) إرسال الطلب إلى ميكروسيرفس Railway
+    payload = {
+        "raw_input": user_data,
+        "include_sections": include_sections
+    }
+
+    try:
+        resp = requests.post(RFP_GENERATOR_URL, json=payload, timeout=900)
+        resp.raise_for_status()   # إذا الاستجابة ليست 200 → يرمي error
+        data = resp.json()
+        decisions = data.get("decisions", {})
+    except Exception as e:
+        print(f"❌ خطأ في استدعاء خدمة توليد RFP على Railway: {e}")
+        # نرجع صفحة بدون نتائج
         return render_template("rfp_generate.html", decisions={}, user_data=user_data)
 
-    from nodes.field_map import FIELD_MAP  # type: ignore
+    # 4) تجهيز النتائج للعرض في الـ UI
+    from nodes.field_map import FIELD_MAP
+
     filtered_decisions = {}
     for key in FIELD_MAP:
         filtered_decisions[key] = {
-            "value": decisions.get(key, ""),  # حتى لو null
+            "value": decisions.get(key, ""),  # حتى لو فارغ
             "type": FIELD_MAP.get(key, "llm")
-
         }
 
-
-    # ✅ ضمان وجود تواريخ حتى لو فشل الـ graph أو كانت فارغة
+    # 5) إضافة التواريخ دائماً حتى لو الموديل لم يرجعها
     for date_key in [
         "Issue_Date",
         "Participation_Confirmation_Letter",
@@ -108,10 +128,17 @@ def generate():
     ]:
         filtered_decisions.setdefault(date_key, {"value": "", "type": "static"})
 
-    
+    # 6) تخزين نتائج الجلسة للاستخدام في /save
     session["user_data"] = user_data
     session["decisions"] = {k: v["value"] for k, v in filtered_decisions.items()}
-    return render_template("rfp_generate.html", decisions=filtered_decisions, user_data=user_data)
+
+    # 7) عرض صفحة النتائج
+    return render_template(
+        "rfp_generate.html",
+        decisions=filtered_decisions,
+        user_data=user_data
+    )
+
 
 
 @app.route('/save', methods=['POST'])
