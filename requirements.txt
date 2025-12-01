@@ -16,6 +16,7 @@ beautifulsoup4>=4.1.0
 lxml
 arabic-reshaper
 python-bidi
+pdfplumber
 # Utilities
 typing_extensions>=4.12.2
 uvicorn>=0.30.0
