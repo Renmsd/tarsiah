@@ -72,15 +72,19 @@ def rfp_input() -> str:
 
 @app.route('/rfp_generate', methods=['POST'])
 def generate():
-    # 1) جمع بيانات المستخدم من الـ form
+    import requests
+
+    RFP_GENERATOR_URL = "https://rfp-generator-production.up.railway.app/generate_rfp"
+
+    # 1) Collect user form input
     user_data = request.form.to_dict(flat=False)
 
-    # تحويل القوائم إلى نصوص (مثل multiple checkboxes)
+    # Convert lists to comma-separated Arabic text
     for key, value in user_data.items():
         if isinstance(value, list):
             user_data[key] = "، ".join(value)
 
-    # 2) تحديد الأقسام التي يريد المستخدم تضمينها
+    # 2) Optional sections
     include_sections = {
         "Joint_Venture": request.form.get("include_Joint_Venture") is not None,
         "Tender_Split_Section": request.form.get("include_Tender_Split_Section") is not None,
@@ -88,9 +92,9 @@ def generate():
         "Insurance": request.form.get("include_Insurance") is not None,
     }
 
-    session["include_sections"] = include_sections  # Optional — لو تحتاجينها لاحقاً
+    session["include_sections"] = include_sections
 
-    # 3) إرسال الطلب إلى ميكروسيرفس Railway
+    # 3) Send request to Railway microservice
     payload = {
         "raw_input": user_data,
         "include_sections": include_sections
@@ -98,26 +102,24 @@ def generate():
 
     try:
         resp = requests.post(RFP_GENERATOR_URL, json=payload, timeout=900)
-        resp.raise_for_status()   # إذا الاستجابة ليست 200 → يرمي error
+        resp.raise_for_status()
         data = resp.json()
         decisions = data.get("decisions", {})
     except Exception as e:
-        print(f"❌ خطأ في استدعاء خدمة توليد RFP على Railway: {e}")
-        # نرجع صفحة بدون نتائج
+        print("❌ Error calling RFP microservice:", e)
         return render_template("rfp_generate.html", decisions={}, user_data=user_data)
 
-    # 4) تجهيز النتائج للعرض في الـ UI
-    from nodes.field_map import FIELD_MAP
-
+    # 4) Build filtered decisions dynamically (NO FIELD_MAP)
     filtered_decisions = {}
-    for key in FIELD_MAP:
+
+    for key, value in decisions.items():
         filtered_decisions[key] = {
-            "value": decisions.get(key, ""),  # حتى لو فارغ
-            "type": FIELD_MAP.get(key, "llm")
+            "value": value,
+            "type": "llm"  # everything from microservice is considered LLM-based
         }
 
-    # 5) إضافة التواريخ دائماً حتى لو الموديل لم يرجعها
-    for date_key in [
+    # 5) Ensure date fields exist even if empty
+    DATE_FIELDS = [
         "Issue_Date",
         "Participation_Confirmation_Letter",
         "Submission_of_Questions_and_Inquiries",
@@ -125,19 +127,19 @@ def generate():
         "Opening_of_Proposals",
         "Award_Decision_Date",
         "Commencement_of_Work",
-    ]:
-        filtered_decisions.setdefault(date_key, {"value": "", "type": "static"})
+    ]
 
-    # 6) تخزين نتائج الجلسة للاستخدام في /save
+    for date_key in DATE_FIELDS:
+        if date_key not in filtered_decisions:
+            filtered_decisions[date_key] = {"value": "", "type": "static"}
+
+    # 6) Save to session
     session["user_data"] = user_data
     session["decisions"] = {k: v["value"] for k, v in filtered_decisions.items()}
 
-    # 7) عرض صفحة النتائج
-    return render_template(
-        "rfp_generate.html",
-        decisions=filtered_decisions,
-        user_data=user_data
-    )
+    # 7) Render the HTML page
+    return render_template("rfp_generate.html", decisions=filtered_decisions, user_data=user_data)
+
 
 
 
