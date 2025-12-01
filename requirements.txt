@@ -18,5 +18,4 @@ arabic-reshaper
 python-bidi
 # Utilities
 typing_extensions>=4.12.2
-tika
 uvicorn>=0.30.0
