@@ -1,3 +1,7 @@
 .env
 __pycache__/
 *.pyc
+*.jar
+tika-server-*
+*.jar
+tika-server-*
