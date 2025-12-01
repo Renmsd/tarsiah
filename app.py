@@ -73,18 +73,24 @@ def rfp_input() -> str:
 @app.route('/rfp_generate', methods=['POST'])
 def generate():
     import requests
+    import traceback
 
     RFP_GENERATOR_URL = "https://rfp-generator-production.up.railway.app/generate_rfp"
 
-    # 1) Collect user form input
+    print("\n==============================")
+    print("🚀 /rfp_generate START")
+    print("==============================")
+
+    # 1) Collect user form data
     user_data = request.form.to_dict(flat=False)
 
-    # Convert lists to comma-separated Arabic text
     for key, value in user_data.items():
         if isinstance(value, list):
             user_data[key] = "، ".join(value)
 
-    # 2) Optional sections
+    print("📌 USER DATA:")
+    print(user_data)
+
     include_sections = {
         "Joint_Venture": request.form.get("include_Joint_Venture") is not None,
         "Tender_Split_Section": request.form.get("include_Tender_Split_Section") is not None,
@@ -92,52 +98,50 @@ def generate():
         "Insurance": request.form.get("include_Insurance") is not None,
     }
 
-    session["include_sections"] = include_sections
+    print("📌 INCLUDE SECTIONS:")
+    print(include_sections)
 
-    # 3) Send request to Railway microservice
     payload = {
         "raw_input": user_data,
         "include_sections": include_sections
     }
 
+    print("\n📤 SENDING TO RAILWAY:")
+    print("URL:", RFP_GENERATOR_URL)
+    print("JSON:", payload)
+
+    # 2) Send request to Railway microservice
     try:
-        resp = requests.post(RFP_GENERATOR_URL, json=payload, timeout=900)
+        resp = requests.post(RFP_GENERATOR_URL, json=payload, timeout=300)
+        print("\n📥 RAILWAY RESPONSE STATUS:", resp.status_code)
+        print("📥 RAW RESPONSE TEXT:\n", resp.text)
+
         resp.raise_for_status()
         data = resp.json()
         decisions = data.get("decisions", {})
+
     except Exception as e:
-        print("❌ Error calling RFP microservice:", e)
+        print("\n❌ ERROR WHILE CALLING RAILWAY")
+        traceback.print_exc()
         return render_template("rfp_generate.html", decisions={}, user_data=user_data)
 
-    # 4) Build filtered decisions dynamically (NO FIELD_MAP)
-    filtered_decisions = {}
+    print("\n📌 FINAL DECISIONS FROM RAILWAY:")
+    print(decisions)
 
-    for key, value in decisions.items():
-        filtered_decisions[key] = {
-            "value": value,
-            "type": "llm"  # everything from microservice is considered LLM-based
-        }
+    # If nothing came...
+    if not decisions:
+        print("⚠️ Railway returned EMPTY decisions!")
+        return render_template("rfp_generate.html", decisions={}, user_data=user_data)
 
-    # 5) Ensure date fields exist even if empty
-    DATE_FIELDS = [
-        "Issue_Date",
-        "Participation_Confirmation_Letter",
-        "Submission_of_Questions_and_Inquiries",
-        "Submission_of_Proposals",
-        "Opening_of_Proposals",
-        "Award_Decision_Date",
-        "Commencement_of_Work",
-    ]
+    # Build structure for template
+    filtered_decisions = {k: {"value": v, "type": "llm"} for k, v in decisions.items()}
 
-    for date_key in DATE_FIELDS:
-        if date_key not in filtered_decisions:
-            filtered_decisions[date_key] = {"value": "", "type": "static"}
-
-    # 6) Save to session
     session["user_data"] = user_data
     session["decisions"] = {k: v["value"] for k, v in filtered_decisions.items()}
 
-    # 7) Render the HTML page
+    print("✅ FINISHED /rfp_generate")
+    print("==============================\n")
+
     return render_template("rfp_generate.html", decisions=filtered_decisions, user_data=user_data)
 
 
