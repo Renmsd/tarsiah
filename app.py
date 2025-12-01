@@ -5,7 +5,6 @@ import json
 from flask import Flask, render_template, request, send_file, jsonify, session
 from docxtpl import DocxTemplate
 from datetime import datetime
-from graph1 import run_graph, llm  # type: ignore
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
@@ -72,10 +71,7 @@ def rfp_input() -> str:
 
 @app.route('/rfp_generate', methods=['POST'])
 def generate():
-    import requests
     import traceback
-
-    RFP_GENERATOR_URL = "https://rfp-generator-production.up.railway.app/generate_rfp"
 
     print("\n==============================")
     print("🚀 /rfp_generate START")
@@ -84,6 +80,7 @@ def generate():
     # 1) Collect user form data
     user_data = request.form.to_dict(flat=False)
 
+    # حوّلي القوائم إلى نصوص مفصولة بفواصل
     for key, value in user_data.items():
         if isinstance(value, list):
             user_data[key] = "، ".join(value)
@@ -91,6 +88,7 @@ def generate():
     print("📌 USER DATA:")
     print(user_data)
 
+    # 2) include_sections (checkboxes)
     include_sections = {
         "Joint_Venture": request.form.get("include_Joint_Venture") is not None,
         "Tender_Split_Section": request.form.get("include_Tender_Split_Section") is not None,
@@ -101,24 +99,41 @@ def generate():
     print("📌 INCLUDE SECTIONS:")
     print(include_sections)
 
+    # 3) Payload to Railway microservice
     payload = {
         "raw_input": user_data,
-        "include_sections": include_sections
+        "include_sections": include_sections,
     }
 
     print("\n📤 SENDING TO RAILWAY:")
     print("URL:", RFP_GENERATOR_URL)
     print("JSON:", payload)
 
-    # 2) Send request to Railway microservice
+    # 4) Call Railway ONCE
     try:
-        resp = requests.post(RFP_GENERATOR_URL, json=payload, timeout=300)
+        resp = requests.post(
+            RFP_GENERATOR_URL,
+            json=payload,
+            timeout=300,
+        )
+
         print("\n📥 RAILWAY RESPONSE STATUS:", resp.status_code)
         print("📥 RAW RESPONSE TEXT:\n", resp.text)
 
         resp.raise_for_status()
-        data = resp.json()
+
+        try:
+            data = resp.json()
+        except Exception:
+            print("❌ Failed to parse JSON from Railway response")
+            return render_template("rfp_generate.html", decisions={}, user_data=user_data)
+
         decisions = data.get("decisions", {})
+        success = data.get("success", True)
+
+        if not success:
+            print("⚠️ Railway returned error:", data.get("error"))
+            return render_template("rfp_generate.html", decisions={}, user_data=user_data)
 
     except Exception as e:
         print("\n❌ ERROR WHILE CALLING RAILWAY")
@@ -128,14 +143,16 @@ def generate():
     print("\n📌 FINAL DECISIONS FROM RAILWAY:")
     print(decisions)
 
-    # If nothing came...
     if not decisions:
         print("⚠️ Railway returned EMPTY decisions!")
         return render_template("rfp_generate.html", decisions={}, user_data=user_data)
 
-    # Build structure for template
-    filtered_decisions = {k: {"value": v, "type": "llm"} for k, v in decisions.items()}
+    # 5) Build structure for template
+    filtered_decisions = {
+        k: {"value": v, "type": "llm"} for k, v in decisions.items()
+    }
 
+    # خزنّا في السيشن عشان /save
     session["user_data"] = user_data
     session["decisions"] = {k: v["value"] for k, v in filtered_decisions.items()}
 
@@ -143,7 +160,6 @@ def generate():
     print("==============================\n")
 
     return render_template("rfp_generate.html", decisions=filtered_decisions, user_data=user_data)
-
 
 
 
